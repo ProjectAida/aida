@@ -126,7 +126,7 @@ public class RunProgram {
 
 		//		---------------------------------------------------------------------------
 
-		imb.blurImage(img5 ,true);
+		imb.blurImage(img5 ,false);
 		imb.binarizeImage(img5, outBinary);
 		if(isCustom){
 			imb.customBlur(img5,outCustom);
