@@ -48,7 +48,14 @@ public class FeatureExtraction {
 	private int[] lineLength;
 	private int[][] rowDepths;
 
-	public int[][] getRowDepths() {		return rowDepths;	}	public void setRowDepths(int[][] rowDepths) {		this.rowDepths = rowDepths;	}	private double marginMEAN;
+	public int[][] getRowDepths() {
+		return rowDepths;
+	}
+	public void setRowDepths(int[][] rowDepths) {
+		this.rowDepths = rowDepths;
+	}
+
+	private double marginMEAN;
 	private double marginSTDEV;
 	private double marginMIN;
 	private double marginMAX;
@@ -88,7 +95,7 @@ public class FeatureExtraction {
 		}
 
 	}
-	public void printRowDepths(){		for(int i=0; i<DEPTH;i++){			for(int j=0;j<WIDTH;j++){			}			System.out.println();		}	}
+
 	public void computeColumnWidths()  {
 
 		boolean stillBackground;
@@ -233,11 +240,12 @@ public class FeatureExtraction {
 			//		min+=Math.abs( (leftColumnWidths[i]-leftColumnWidths[i+1]) );
 			//	}
 			//}
+		}
 
 		jaggedMEAN = sum/(1.0*(DEPTH-(2*WOFFSET)));				
 		jaggedMAX=max;
 		jaggedMIN=min;
-	//	jaggedRANGE=Math.abs(max-min);
+		jaggedRANGE=Math.abs(max-min);
 
 		// Then use the mean to compute the standard deviation
 
