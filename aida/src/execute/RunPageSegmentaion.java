@@ -68,14 +68,6 @@ public class RunPageSegmentaion {
 				}
 			}
 		}else{
-			StringBuilder sb = new StringBuilder();
-			BufferedWriter successStream = null;
-			try{ 
-				File successList = new File(Constants.data,"SuccessList.txt");
-				successStream = new BufferedWriter(new FileWriter(successList,true));
-			}catch (Exception e){
-				e.printStackTrace();
-			}
 			File start = new File(Constants.fullPagePath);
 			File[] newspapers = start.listFiles(new FileFilter(){
 				@Override
@@ -113,11 +105,10 @@ public class RunPageSegmentaion {
 							Image img = importImage(path);
 							try{
 								segmentImage(img);
-								sb.append(img.getName()+"\n");
 								System.out.print("\rSegmented: Newspaper "+currentPaper+"/"+numOfNewspapers+" Issue "+currentIssue+"/"+numOfIssues+" Image "+currentImage+"/"+numOfImages+" in "+file.getName()+"       ");
 							}catch(RuntimeException r){
 								System.out.println();
-							//	System.out.println("ERROR: Unable to segment "+img.getName()+"\nPlease make sure that the image isn't rotated and has good contrast");
+								System.out.println("ERROR: Unable to segment "+img.getName()+"\nPlease make sure that the image isn't rotated and has good contrast");
 	            		            			r.printStackTrace();
 										File output = new File(Constants.data,"FailedList.txt");    
 	            		            					try {
@@ -148,13 +139,6 @@ public class RunPageSegmentaion {
 		        		            					}
 								
 							}
-						}
-						try{
-							successStream.append(sb.toString());
-							successStream.flush();
-						//	successStream.close();
-						}catch (Exception e){
-							e.printStackTrace();
 						}
 					}
 				}

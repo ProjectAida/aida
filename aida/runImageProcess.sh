@@ -4,7 +4,7 @@ cd ../
 NOME=$1
 c=0
 a=1
-+++
+#+++
 if grep  "$NOME" data/snippetPathList.txt ; then
         echo "CREATING ARRAY"
         while read line
