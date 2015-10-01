@@ -2,6 +2,6 @@
 *.json
 *.arff
 aida/data/Analysis/*
-
+*.class
 
 aida/src/.DS_Store
