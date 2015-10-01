@@ -3,3 +3,5 @@
 *.arff
 aida/data/Analysis/*
 
+
+aida/src/.DS_Store
