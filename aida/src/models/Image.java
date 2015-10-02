@@ -350,7 +350,7 @@ public class Image {
 	 * These columns can be represented visually by either whitespace separating text columns or
 	 * by continuous, straight black lines.
 	 */
-	public void findColumnBreaks(){
+	public boolean findColumnBreaks(){
 		
 		ArrayList<Integer> whiteColumns = new ArrayList<Integer>();
 		int whiteCount;
@@ -494,20 +494,40 @@ public class Image {
 			
 		}
 		stdDev = Math.ceil(Math.sqrt(vari/count));
-		for(int p = 1; p < columns.size()-1; p++){
-			if(columns.get(p)-columns.get(p-1) < mean-10){
-				if(columns.get(p+1)-columns.get(p-1) < mean+(stdDev) && columns.get(p+1)-columns.get(p-1) > mean-stdDev){
-//					columnsToRemove.add(columns.get(p));
-					columns.remove(p);
-					p--;
-				}
-			}
-		}
+//		for(int p = 1; p < columns.size()-1; p++){
+//			if(columns.get(p)-columns.get(p-1) < mean-10){
+//				if(columns.get(p+1)-columns.get(p-1) < mean+(stdDev) && columns.get(p+1)-columns.get(p-1) > mean-stdDev){
+////					columnsToRemove.add(columns.get(p));
+//					columns.remove(p);
+//					p--;
+//				}
+//			}
+//		}
 		ArrayList<Integer> columnWidth = new ArrayList<Integer>();
 		for(int p = 0; p < columns.size()-1; p++){
 			columnWidth.add(columns.get(p+1)-columns.get(p));
 		}
 		Collections.sort(columnWidth);
+        
+        int numOfColumnWidths = columnWidth.size();
+        
+        int columnWidthMean = 0;
+        for(int width : columnWidth){
+            columnWidthMean += width;
+        }
+        columnWidthMean = columnWidthMean/numOfColumnWidths;
+        int columnWidthVarience = 0;
+        for(int width : columnWidth){
+            int temp = width - columnWidthMean;
+            columnWidthVarience += Math.pow(temp,2);
+        }
+        columnWidthVarience = columnWidthVarience/numOfColumnWidths;
+        double columnWidthStdDev = Math.ceil(Math.sqrt(columnWidthVarience));
+        
+        if(columnWidthStdDev > 150) {
+            return false;
+        }
+        
 		int averageWidth = columnWidth.get((int) Math.floor(columnWidth.size()/2));
 		for(int p = columns.size()-1; p >= 1; p--){
 			if(columns.get(p-1) < columns.get(p)-averageWidth-75){
@@ -530,15 +550,16 @@ public class Image {
         
 		System.out.println(columns);
 		if(columns.size()<3){
-			throw new RuntimeException();
+            return false;
 		}
 		if(columns.get(0)>this.horizontal/2){
-			throw new RuntimeException();
+            return false;
 		}
 //		columns.removeAll(columnsToRemove);
 		
 		//stores the column breaks list in the class Image
 		this.setColumnBreaks(columns);
+        return true;
 	}
 	/**
 	 * Method to output an image with red lines indicating the column breaks

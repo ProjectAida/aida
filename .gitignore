@@ -5,3 +5,5 @@ aida/data/Analysis/*
 *.class
 
 aida/src/.DS_Store
+
+aida/src/global/.DS_Store

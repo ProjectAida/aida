@@ -194,10 +194,23 @@ public class RunPageSegmentaion {
 		ImageBlurrer imb = new ImageBlurrer();
 		imb.binarizeSegment(img, true);
 		
-		img.findColumnBreaks();
-		System.out.println(img.getColumnBreaks());
-		img.showColumnBreaks();
-		
-		img.convertPageToSnippets(true);
+		boolean shouldContinue = img.findColumnBreaks();
+        
+        if(shouldContinue) {
+            System.out.println(img.getColumnBreaks());
+            img.showColumnBreaks();
+            
+            img.convertPageToSnippets(true);
+        } else {
+            File output = new File(Constants.data, "imageFailedNeedHuman.txt");
+            if(!output.exists()) {
+                output.createNewFile();
+            }
+            try {
+                FileWriter writer = new FileWriter(output, true);
+                writer.write(img.getName()+"\n");
+                writer.close();
+            }
+        }
 	}
 }
