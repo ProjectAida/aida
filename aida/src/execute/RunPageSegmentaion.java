@@ -203,13 +203,15 @@ public class RunPageSegmentaion {
             //img.convertPageToSnippets(true);
         } else {
             File output = new File(Constants.data, "imageFailedNeedHuman.txt");
-            if(!output.exists()) {
-                output.createNewFile();
-            }
             try {
+                if(!output.exists()) {
+                    output.createNewFile();
+                }
                 FileWriter writer = new FileWriter(output, true);
                 writer.write(img.getName()+"\n");
                 writer.close();
+            } catch(IOException ioe) {
+                ioe.printStackTrace();
             }
         }
 	}
