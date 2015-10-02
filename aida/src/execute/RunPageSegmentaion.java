@@ -192,15 +192,15 @@ public class RunPageSegmentaion {
 	 */
 	public static void segmentImage(Image img){
 		ImageBlurrer imb = new ImageBlurrer();
-		imb.binarizeSegment(img, true);
+		imb.binarizeSegment(img, false);
 		
 		boolean shouldContinue = img.findColumnBreaks();
         
         if(shouldContinue) {
             System.out.println(img.getColumnBreaks());
-            img.showColumnBreaks();
+            //img.showColumnBreaks();
             
-            img.convertPageToSnippets(true);
+            //img.convertPageToSnippets(true);
         } else {
             File output = new File(Constants.data, "imageFailedNeedHuman.txt");
             if(!output.exists()) {

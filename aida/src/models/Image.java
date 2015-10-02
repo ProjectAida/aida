@@ -16,6 +16,12 @@ import javax.imageio.ImageIO;
  *
  */
 public class Image {
+    
+    private int COLUMN_COUNT_MAX = 50;
+    private int WHITE_COLUMN_SEPARATION_MIN = 150;
+    private int BLACK_COLUMN_SEPARATION_MIN = 125;
+    private int EDGE_COLUMN_DISTANCE_MAX = 100;
+    private int COLUMN_SEPARATION_MIN = 75;
 
 	public int[][] byteImage;
 	protected int[][] byteImage2;
@@ -364,13 +370,13 @@ public class Image {
 			}
 			if(whiteCount >= (this.vertical*.9)){
 				columnCount++;
-				if(columnCount < 50){
+				if(columnCount < COLUMN_COUNT_MAX){
 					whiteColumns.add(j);
 				}
 			}else if(whiteCount < (this.vertical*.9)){
 				if(whiteColumns.contains(j-1)){
 					columnCount = 0;
-				}else if(!whiteColumns.contains(j-1) && columnCount >= 50){
+				}else if(!whiteColumns.contains(j-1) && columnCount >= COLUMN_COUNT_MAX){
 					columnCount = 0;
 				}
 			}
@@ -385,7 +391,7 @@ public class Image {
 		 *white column of the next section of white columns.
 		 */
 		for(int k = 0; k < whiteColumns.size()-1; k++){
-			if(whiteColumns.get(k+1) - whiteColumns.get(k) > 150){
+			if(whiteColumns.get(k+1) - whiteColumns.get(k) > WHITE_COLUMN_SEPARATION_MIN){
 				int index = k-((k - marker)/2);
 				columns.add(whiteColumns.get(index));
 				marker = k+1;
@@ -443,7 +449,7 @@ public class Image {
 			}
 			marker = 0;
 			for(int k = 0; k < blackColumns.size()-1; k++){
-				if(blackColumns.get(k+1) - blackColumns.get(k) > 125){
+				if(blackColumns.get(k+1) - blackColumns.get(k) > BLACK_COLUMN_SEPARATION_MIN){
 					int index = k-((k - marker)/2);
 					columns.add(blackColumns.get(index));
 					marker = k+1;
@@ -456,19 +462,19 @@ public class Image {
 		ArrayList<Integer> columnsToRemove = new ArrayList<Integer>();
 		
 		int index = 0;
-		while(columns.get(index) < 100){
+		while(columns.get(index) < EDGE_COLUMN_DISTANCE_MAX){
 			columnsToRemove.add(columns.get(index));
 			index++;
 		}
 		index = 1;
-		while(this.horizontal-columns.get(columns.size()-index) < 100){
+		while(this.horizontal-columns.get(columns.size()-index) < EDGE_COLUMN_DISTANCE_MAX){
 			columnsToRemove.add(columns.get(columns.size()-index));
 			index++;
 		}
 		columns.removeAll(columnsToRemove);
 		columnsToRemove.clear();
 		for(int p = 0; p < columns.size()-1; p++){
-			if(columns.get(p+1)-columns.get(p) < 75){
+			if(columns.get(p+1)-columns.get(p) < COLUMN_SEPARATION_MIN){
 				columnsToRemove.add(columns.get(p));
 				columnsToRemove.add(columns.get(p+1));
 				int middle = columns.get(p+1) - ((columns.get(p+1)-columns.get(p))/2);
@@ -530,10 +536,10 @@ public class Image {
         
 		int averageWidth = columnWidth.get((int) Math.floor(columnWidth.size()/2));
 		for(int p = columns.size()-1; p >= 1; p--){
-			if(columns.get(p-1) < columns.get(p)-averageWidth-75){
+			if(columns.get(p-1) < columns.get(p)-averageWidth-COLUMN_SEPARATION_MIN){
 				columns.add(p, columns.get(p)-averageWidth);
 				p++;
-			}else if(columns.get(p-1) > columns.get(p)-averageWidth+75){
+			}else if(columns.get(p-1) > columns.get(p)-averageWidth+COLUMN_SEPARATION_MIN){
 				columns.remove(p-1);
 				if(columns.get(p-1)-averageWidth > 0){
 					columns.add(p-1, columns.get(p-1)-averageWidth);
