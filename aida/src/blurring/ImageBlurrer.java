@@ -222,7 +222,8 @@ public class ImageBlurrer {
 
 	}
 	
-	public void binarizeSegment(Image im, boolean shouldOutput){
+	public void binarizeSegment(Image im, boolean shouldOutputContrasted, boolean shouldOutputBinary, boolean shouldOutputBinaryCleaned){
+        
 		int w = im.getHorizontal(), h = im.getVertical();
 		
 		BlurredImage bli = new BlurredImage(im);
@@ -258,7 +259,7 @@ public class ImageBlurrer {
 				}
 			}
 			
-            if(shouldOutput) {
+            if(shouldOutputContrasted) {
                 BufferedImage OutputImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
                 
                 /***** This Segment is meant for printing out Binary images*****/
@@ -280,7 +281,7 @@ public class ImageBlurrer {
 			bni = stf.generateBinaryImage(bli);
 		}
         
-        if(shouldOutput) {
+        if(shouldOutputBinary) {
             BufferedImage OutputImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
             
             /***** This Segment is meant for printing out Binary images*****/
@@ -307,7 +308,7 @@ public class ImageBlurrer {
 		
 		bni.setBinaryImagePixels(erodedPixels);
 		
-        if(shouldOutput) {
+        if(shouldOutputBinaryCleaned) {
             BufferedImage OutputImage2 = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
             for (int y = 0; y < bni.getVertical(); y++) {
                 for (int x = 0; x < bni.getHorizontal(); x++) {
@@ -316,7 +317,8 @@ public class ImageBlurrer {
                     OutputImage2.setRGB(x, y, value);
                 }
             }
-            outputImage(OutputImage2, Constants.binaryOutput,"binary_cleaned.jpg");
+            String baseName = im.getName().substring(0, im.getName().length()-4);
+            outputImage(OutputImage2, Constants.binaryOutput, baseName+"_cleaned.jpg");
         }
 		
 		im.setByteImage(bni.getBinaryImagePixels());

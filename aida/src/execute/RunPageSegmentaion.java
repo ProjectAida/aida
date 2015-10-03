@@ -192,13 +192,13 @@ public class RunPageSegmentaion {
 	 */
 	public static void segmentImage(Image img){
 		ImageBlurrer imb = new ImageBlurrer();
-		imb.binarizeSegment(img, false);
+		imb.binarizeSegment(img, false, false, true);
 		
 		boolean shouldContinue = img.findColumnBreaks();
         
         if(shouldContinue) {
             System.out.println(img.getColumnBreaks());
-            //img.showColumnBreaks();
+            img.showColumnBreaks();
             
             //img.convertPageToSnippets(true);
         } else {

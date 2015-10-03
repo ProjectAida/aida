@@ -594,7 +594,7 @@ public class Image {
 			}
 		}
 		//Output the image to a file of our choosing
-		File outputFile = new File(Constants.binaryOutput,this.name);
+		File outputFile = new File(Constants.customOutput,this.name);
 		try {
 			ImageIO.write(OutputImage, "jpg", outputFile);
 		} catch (IOException e) {
