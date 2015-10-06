@@ -26,7 +26,7 @@ public class Constants {
 	public static final String analysisFileDirectory = "../data/Analysis/";
 	public static final String archiveList = "../data/Archive_list.txt";	
 	public static final String TestList = "../data/Image_Lists/ImageListTest.txt";
-	public static final String List = "../data/SnippetList.txt";
+	public static final String List = "../data/SnippetNameList.txt";
 	public static final String morphOutFolder = "../data/morphOut/";
 	
 	public static final String logDirectory = "../data/logs/";	
