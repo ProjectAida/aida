@@ -192,23 +192,40 @@ public class RunPageSegmentaion {
 	 */
 	public static void segmentImage(Image img){
 		ImageBlurrer imb = new ImageBlurrer();
-		imb.binarizeSegment(img, false, false, true);
+		imb.binarizeSegment(img, false, false, false);
 		
-		boolean shouldContinue = img.findColumnBreaks();
+		int shouldContinue = img.findColumnBreaks();
+        System.out.println(shouldContinue);
         
-        if(shouldContinue) {
+        if(shouldContinue == 0){
             System.out.println(img.getColumnBreaks());
-            img.showColumnBreaks();
+            //img.showColumnBreaks();
             
             //img.convertPageToSnippets(true);
         } else {
+            //img.showColumnBreaks();
+            String error = "";
+            switch(shouldContinue){
+                case 1:
+                    error = "No columns found";
+                    break;
+                case 2:
+                    error = "Std Dev Above 150";
+                    break;
+                case 3:
+                    error = "Only one or two columns found";
+                    break;
+                case 4:
+                    error = "Columns are only on half of the page";
+                    break;
+            }
             File output = new File(Constants.data, "imageFailedNeedHuman.txt");
             try {
                 if(!output.exists()) {
                     output.createNewFile();
                 }
                 FileWriter writer = new FileWriter(output, true);
-                writer.write(img.getName()+"\n");
+                writer.write(img.getName()+", "+error+"\n");
                 writer.close();
             } catch(IOException ioe) {
                 ioe.printStackTrace();

@@ -356,7 +356,7 @@ public class Image {
 	 * These columns can be represented visually by either whitespace separating text columns or
 	 * by continuous, straight black lines.
 	 */
-	public boolean findColumnBreaks(){
+	public int findColumnBreaks(){
 		
 		ArrayList<Integer> whiteColumns = new ArrayList<Integer>();
 		int whiteCount;
@@ -458,6 +458,10 @@ public class Image {
 			Collections.sort(columns);
 //		}
 		
+        if(columns.size() == 0){
+            return 1;
+        }
+        
 		ArrayList<Integer> columnsToAdd = new ArrayList<Integer>();
 		ArrayList<Integer> columnsToRemove = new ArrayList<Integer>();
 		
@@ -531,7 +535,8 @@ public class Image {
         double columnWidthStdDev = Math.ceil(Math.sqrt(columnWidthVarience));
         
         if(columnWidthStdDev > 150) {
-            return false;
+            this.setColumnBreaks(columns);
+            return 2;
         }
         
 		int averageWidth = columnWidth.get((int) Math.floor(columnWidth.size()/2));
@@ -556,16 +561,18 @@ public class Image {
         
 		System.out.println(columns);
 		if(columns.size()<3){
-            return false;
+            this.setColumnBreaks(columns);
+            return 3;
 		}
 		if(columns.get(0)>this.horizontal/2){
-            return false;
+            this.setColumnBreaks(columns);
+            return 4;
 		}
 //		columns.removeAll(columnsToRemove);
 		
 		//stores the column breaks list in the class Image
 		this.setColumnBreaks(columns);
-        return true;
+        return 0;
 	}
 	/**
 	 * Method to output an image with red lines indicating the column breaks
