@@ -198,7 +198,17 @@ public class RunPageSegmentaion {
         System.out.println(shouldContinue);
         
         if(shouldContinue == 0){
-            System.out.println(img.getColumnBreaks());
+            File output = new File(Constants.data, "imagePassed.txt");
+            try {
+                if(!output.exists()) {
+                    output.createNewFile();
+                }
+                FileWriter writer = new FileWriter(output, true);
+                writer.write(img.getName()+", "+img.getColumnBreaks()+"\n");
+                writer.close();
+            } catch(IOException ioe) {
+                ioe.printStackTrace();
+            }
             //img.showColumnBreaks();
             
             //img.convertPageToSnippets(true);
