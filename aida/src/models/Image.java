@@ -459,6 +459,7 @@ public class Image {
 //		}
 		
         if(columns.size() == 0){
+            this.setColumnBreaks(columns);
             return 1;
         }
         

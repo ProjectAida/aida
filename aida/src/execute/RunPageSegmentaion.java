@@ -207,16 +207,16 @@ public class RunPageSegmentaion {
             String error = "";
             switch(shouldContinue){
                 case 1:
-                    error = "No columns found";
+                    error = "No columns found, "+img.getColumnBreaks();
                     break;
                 case 2:
-                    error = "Std Dev Above 150";
+                    error = "Std Dev Above 150, "+img.getColumnBreaks();
                     break;
                 case 3:
-                    error = "Only one or two columns found";
+                    error = "Only one or two columns found, "+img.getColumnBreaks();
                     break;
                 case 4:
-                    error = "Columns are only on half of the page";
+                    error = "Columns are only on half of the page, "+img.getColumnBreaks();
                     break;
             }
             File output = new File(Constants.data, "imageFailedNeedHuman.txt");
