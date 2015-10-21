@@ -66,6 +66,15 @@ public class FinalResultGenerator {
 					falseNegatives++;
 				}
 			}
+			
+			HashSet<String> temp = new HashSet(FalseList);
+			for (String s: FalseList){
+				(if Truelist.contains(s)){
+					temp.remove(s);
+				}
+			}
+			FalseList = new HashSet(temp);
+			
 			System.out.println("truePositives: "+truePositives);
 			System.out.println("falsePositives: "+falsePositives);
 			System.out.println("Total Positive Predicted: "+ (truePositives + falsePositives));
