@@ -457,11 +457,6 @@ public class Image {
 			}
 			Collections.sort(columns);
 //		}
-		
-        if(columns.size() == 0){
-            this.setColumnBreaks(columns);
-            return 1;
-        }
         
 		ArrayList<Integer> columnsToAdd = new ArrayList<Integer>();
 		ArrayList<Integer> columnsToRemove = new ArrayList<Integer>();
@@ -491,6 +486,12 @@ public class Image {
 		columns.addAll(columnsToAdd);
 		Collections.sort(columns);
 		columnsToRemove.clear();
+        
+        //Rule 1: check for no columns found
+        if(columns.size() == 0){
+            this.setColumnBreaks(columns);
+            return 1;
+        }
 		
 		count = 0;
 		mean = 0;
@@ -520,6 +521,17 @@ public class Image {
 		}
 		Collections.sort(columnWidth);
         
+        //Rule : check for less than three columns and check if columns are on more than half of the page
+        if(columns.size()<3){
+            this.setColumnBreaks(columns);
+            return 2;
+        }
+        
+        if(columns.get(0)>this.horizontal/2 || columns.get(columns.size()-1) < horizontal/2){
+            this.setColumnBreaks(columns);
+            return 3;
+        }
+        
         int numOfColumnWidths = columnWidth.size();
         
         int columnWidthMean = 0;
@@ -534,10 +546,12 @@ public class Image {
         }
         columnWidthVarience = columnWidthVarience/numOfColumnWidths;
         double columnWidthStdDev = Math.ceil(Math.sqrt(columnWidthVarience));
+        System.out.println("Std Dev: "+columnWidthStdDev);
         
+        //Rule : Check column width Std Dev. Good images were experimentally determined to be below 150 Std Dev.
         if(columnWidthStdDev > 150) {
             this.setColumnBreaks(columns);
-            return 2;
+            return 4;
         }
         
 		int averageWidth = columnWidth.get((int) Math.floor(columnWidth.size()/2));
@@ -553,22 +567,14 @@ public class Image {
 			}
 		}
 		
-        if(columns.get(0) > this.horizontal*.1 && columns.get(0)-averageWidth > 0){
+        while(columns.get(0) > this.horizontal*.1 && columns.get(0)-averageWidth > 0){
             columns.add(0, columns.get(0)-averageWidth);
         }
-        if(columns.get(columns.size()-1) < this.horizontal-(this.horizontal*.1) && columns.get(columns.size()-1)+averageWidth < this.horizontal){
+        while(columns.get(columns.size()-1) < this.horizontal-(this.horizontal*.1) && columns.get(columns.size()-1)+averageWidth < this.horizontal){
             columns.add(columns.get(columns.size()-1)+averageWidth);
         }
         
 		System.out.println(columns);
-		if(columns.size()<3){
-            this.setColumnBreaks(columns);
-            return 3;
-		}
-		if(columns.get(0)>this.horizontal/2){
-            this.setColumnBreaks(columns);
-            return 4;
-		}
 //		columns.removeAll(columnsToRemove);
 		
 		//stores the column breaks list in the class Image
