@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.FileWriter;
+import java.io.BufferedWriter;
 
 import javax.imageio.ImageIO;
 
@@ -69,6 +70,14 @@ public class RunPageSegmentaion {
 			}
 		}else{
 			File start = new File(Constants.fullPagePath);
+			File successFile = new File(Constants.successSegment);
+			BufferedWriter successStream = null;
+			try{
+				successStream = new BufferedWriter(new FileWriter(successFile,false));
+			}catch(Exception e){
+				System.out.println("Failed to create BufferedWriter");
+			}
+			StringBuilder sb = new StringBuilder();
 			File[] newspapers = start.listFiles(new FileFilter(){
 				@Override
 				public boolean accept(File file){
@@ -106,6 +115,7 @@ public class RunPageSegmentaion {
 							try{
 								segmentImage(img, false);
 								System.out.print("\rSegmented: Newspaper "+currentPaper+"/"+numOfNewspapers+" Issue "+currentIssue+"/"+numOfIssues+" Image "+currentImage+"/"+numOfImages+" in "+file.getName()+"       ");
+								sb.append(img.getName()+"\n");
 							}catch(RuntimeException r){
 								System.out.println();
 								System.out.println("ERROR: Unable to segment "+img.getName()+"\nPlease make sure that the image isn't rotated and has good contrast");
@@ -143,7 +153,13 @@ public class RunPageSegmentaion {
 					}
 				}
 			}
-		
+			try{
+				successStream.append(sb.toString());
+				successStream.flush();
+				successStream.close();
+			}catch(Exception e){
+				System.out.println("Writing to file Failed. Unexpected error");
+			}
 		}
 	}
 
