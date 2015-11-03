@@ -47,7 +47,7 @@ public class RunPageSegmentaion {
 						System.out.println("Image "+i);
 						Image img = importImage(line);
 						try{
-							segmentImage(img);
+							segmentImage(img, false);
 						}catch(RuntimeException r){
 							System.out.println("ERROR: Unable to segment "+img.getName()+"\nPlease make sure that the image isn't rotated and has good contrast");
 						}catch(Exception e){
@@ -62,7 +62,7 @@ public class RunPageSegmentaion {
 			}else if(args[0].contains(".jpg")){
 				Image img = importImage(args[0]);
 				try{
-					segmentImage(img);	
+					segmentImage(img, false);
 				} catch(Exception e){
 					e.printStackTrace();
 					//System.out.println("ERROR: Unable to segment "+img.getName()+"\nPlease make sure that the page isn't rotated");
@@ -113,7 +113,7 @@ public class RunPageSegmentaion {
 							String path = image.getAbsolutePath();
 							Image img = importImage(path);
 							try{
-								segmentImage(img);
+								segmentImage(img, false);
 								System.out.print("\rSegmented: Newspaper "+currentPaper+"/"+numOfNewspapers+" Issue "+currentIssue+"/"+numOfIssues+" Image "+currentImage+"/"+numOfImages+" in "+file.getName()+"       ");
 								sb.append(img.getName()+"\n");
 							}catch(RuntimeException r){
@@ -206,14 +206,61 @@ public class RunPageSegmentaion {
 	 * A helper method for grouping together the function calls for image segmentation.
 	 * @param img
 	 */
-	public static void segmentImage(Image img){
+	public static void segmentImage(Image img, boolean shouldShowColumns){
 		ImageBlurrer imb = new ImageBlurrer();
-		imb.binarizeSegment(img, true);
+		imb.binarizeSegment(img, false, false, false);
 		
-		img.findColumnBreaks();
-		System.out.println(img.getColumnBreaks());
-		img.showColumnBreaks();
-		
-		img.convertPageToSnippets(true);
+		int shouldContinue = img.findColumnBreaks();
+        System.out.println(shouldContinue);
+        
+        if(shouldContinue == 0){
+            File output = new File(Constants.data, "imagePassed.txt");
+            try {
+                if(!output.exists()) {
+                    output.createNewFile();
+                }
+                FileWriter writer = new FileWriter(output, true);
+                writer.write(img.getName()+", "+img.getColumnBreaks()+"\n");
+                writer.close();
+            } catch(IOException ioe) {
+                ioe.printStackTrace();
+            }
+            
+            if(shouldShowColumns) {
+                img.showColumnBreaks();
+            }
+            
+            //img.convertPageToSnippets(true);
+        } else {
+            if(shouldShowColumns) {
+                img.showColumnBreaks();
+            }
+            String error = "";
+            switch(shouldContinue){
+                case 1:
+                    error = "No columns found, "+img.getColumnBreaks();
+                    break;
+                case 2:
+                    error = "Only one or two columns found, "+img.getColumnBreaks();
+                    break;
+                case 3:
+                    error = "Columns are only on half of the page, "+img.getColumnBreaks();
+                    break;
+                case 4:
+                	error = "Std Dev Above 150, "+img.getColumnBreaks();
+                	break;
+            }
+            File output = new File(Constants.data, "imageFailedNeedHuman.txt");
+            try {
+                if(!output.exists()) {
+                    output.createNewFile();
+                }
+                FileWriter writer = new FileWriter(output, true);
+                writer.write(img.getName()+", "+error+"\n");
+                writer.close();
+            } catch(IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
 	}
 }
