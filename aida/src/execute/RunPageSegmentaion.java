@@ -46,7 +46,7 @@ public class RunPageSegmentaion {
 						System.out.println("Image "+i);
 						Image img = importImage(line);
 						try{
-							segmentImage(img);
+							segmentImage(img, false);
 						}catch(RuntimeException r){
 							System.out.println("ERROR: Unable to segment "+img.getName()+"\nPlease make sure that the image isn't rotated and has good contrast");
 						}catch(Exception e){
@@ -61,7 +61,7 @@ public class RunPageSegmentaion {
 			}else if(args[0].contains(".jpg")){
 				Image img = importImage(args[0]);
 				try{
-					segmentImage(img);	
+					segmentImage(img, false);
 				} catch(Exception e){
 					e.printStackTrace();
 					//System.out.println("ERROR: Unable to segment "+img.getName()+"\nPlease make sure that the page isn't rotated");
@@ -104,7 +104,7 @@ public class RunPageSegmentaion {
 							String path = image.getAbsolutePath();
 							Image img = importImage(path);
 							try{
-								segmentImage(img);
+								segmentImage(img, false);
 								System.out.print("\rSegmented: Newspaper "+currentPaper+"/"+numOfNewspapers+" Issue "+currentIssue+"/"+numOfIssues+" Image "+currentImage+"/"+numOfImages+" in "+file.getName()+"       ");
 							}catch(RuntimeException r){
 								System.out.println();
@@ -190,7 +190,7 @@ public class RunPageSegmentaion {
 	 * A helper method for grouping together the function calls for image segmentation.
 	 * @param img
 	 */
-	public static void segmentImage(Image img){
+	public static void segmentImage(Image img, boolean shouldShowColumns){
 		ImageBlurrer imb = new ImageBlurrer();
 		imb.binarizeSegment(img, false, false, false);
 		
@@ -209,11 +209,16 @@ public class RunPageSegmentaion {
             } catch(IOException ioe) {
                 ioe.printStackTrace();
             }
-            //img.showColumnBreaks();
+            
+            if(shouldShowColumns) {
+                img.showColumnBreaks();
+            }
             
             //img.convertPageToSnippets(true);
         } else {
-            //img.showColumnBreaks();
+            if(shouldShowColumns) {
+                img.showColumnBreaks();
+            }
             String error = "";
             switch(shouldContinue){
                 case 1:

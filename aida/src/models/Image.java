@@ -492,20 +492,7 @@ public class Image {
             this.setColumnBreaks(columns);
             return 1;
         }
-		
-		count = 0;
-		mean = 0;
-		for(int p = 0; p < columns.size()-1; p++){
-			mean += (columns.get(p+1)-columns.get(p));
-			count++;
-		}
-		mean = mean/count;
-		vari = 0;
-		for(int p = 0; p < columns.size()-1; p++){
-			vari += Math.pow((columns.get(p+1)-columns.get(p))-mean, 2);
-			
-		}
-		stdDev = Math.ceil(Math.sqrt(vari/count));
+        
 //		for(int p = 1; p < columns.size()-1; p++){
 //			if(columns.get(p)-columns.get(p-1) < mean-10){
 //				if(columns.get(p+1)-columns.get(p-1) < mean+(stdDev) && columns.get(p+1)-columns.get(p-1) > mean-stdDev){
