@@ -1,5 +1,4 @@
 *.jpg
 *.json
 *.arff
-aida/data/Analysis/*
-
+*.class
