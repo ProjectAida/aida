@@ -37,26 +37,47 @@ public class FinalResultGenerator {
 			}
 			String line=null;
 			double i=1,truePositives=0,falsePositives=0,trueNegatives=0,falseNegatives=0,total=0;
+			HashSet<String> classTrue = new HashSet<String>();
+			HashSet<String> classFalse = new HashSet<String>();
+			
 			while((line=truePageReader.readLine())!=null){
+				classTrue.add(line);
+			}
+			line=null;
+			while((line=falsePageReader.readLine())!=null){
+				classFalse.add(line);
+			}
+
+			
+			HashSet<String> falseTemp = new HashSet(classFalse);
+			for (String s: classFalse){
+				if (classTrue.contains(s)){
+					falseTemp.remove(s);
+				}
+			}
+			classFalse = new HashSet(falseTemp);
+
+			
+			for(String s: classTrue){
 				total++;
-				boolean contains =false;
-				for (String s : TrueList){
-					if(s.contains(line)){
+				boolean contains = false;
+				for (String t : TrueList){
+					if(t.contains(s)){
 						truePositives++;
 						contains = true;					
 					}				
 				}
-				
-				if(contains!=true){
+					
+				if(contains == false){
 					falsePositives++;
 				}
 			}
-			
-			while((line=falsePageReader.readLine())!=null){
+
+			for(String s: classFalse){			
 				total++;
 				boolean contains =false;
-				for (String s : FalseList){
-					if(s.contains(line)){
+				for (String t : FalseList){
+					if(t.contains(s)){
 						trueNegatives++;
 						contains = true;					
 					}				
@@ -66,20 +87,24 @@ public class FinalResultGenerator {
 					falseNegatives++;
 				}
 			}
+			
 			System.out.println("truePositives: "+truePositives);
 			System.out.println("falsePositives: "+falsePositives);
 			System.out.println("Total Positive Predicted: "+ (truePositives + falsePositives));
 			System.out.println("Total Actual Positives"+ actualTrues);
 			System.out.println("trueNegatives: "+trueNegatives);
 			System.out.println("falseNegatives: "+falseNegatives);
+
 			System.out.println("Total Negative Predicted: "+ (trueNegatives + falseNegatives));
 			System.out.println("Total Actual Negatives"+ actualFalses);
 			System.out.println("Total Newspapers: "+total);
 			System.out.println("Precision: "+(truePositives/(truePositives+falsePositives)));
-			System.out.println("True positive rate (Recall): "+(truePositives/actualTrues));
-			System.out.println("False Negative rate: "+ (falseNegatives/(falseNegatives+truePositives)));
-			System.out.println("False Positive rate: "+ (falsePositives/(falsePositives+truePositives)));
-			System.out.println("True Negaive Rate: "+ (trueNegatives/actualFalses));
+
+
+			System.out.println("True positive rate (Recall): "+(truePositives/(truePositives+falseNegatives))*100+" %");
+			System.out.println("False Negative rate:         "+ (falseNegatives/(falseNegatives+truePositives))*100+" %");
+			System.out.println("False Positive rate:         "+ (falsePositives/(falsePositives+trueNegatives))*100+" %");
+			System.out.println("True Negaive Rate:           "+ (trueNegatives/(trueNegatives+falsePositives))*100+" %");
 
 
 		} catch (FileNotFoundException e) {

@@ -116,7 +116,7 @@ public class WekaAdapter implements Prediction{
 		trainSet.randomize(new Random(123));
 
 		Instances trainSetCopy = new Instances(trainSet, 0, trainSet.numInstances());
-		//trainSet.deleteAttributeAt(0);
+		trainSet.deleteAttributeAt(0);
 		Instances testSetCopy = new Instances(testSet, 0, testSet.numInstances());
 		testSet.deleteAttributeAt(0);
 
@@ -167,38 +167,26 @@ public class WekaAdapter implements Prediction{
 				}
 				
 				if(network.classifyInstance(test.instance(k))==1.0){
-				pos_num++;
-				String[] snippetName= testCopy.instance(k).toString(0).split("_");
-				String parentName = snippetName[0]+"_"+snippetName[1]+"_"+snippetName[2]+"_"+snippetName[3];
-				//System.out.print("True, "+pos_num+", "+testCopy.instance(k).toString(0)+", "+parentName+", ");
-				if(!trueParentList.contains(parentName)){
-					trueParentList.add(parentName);
-					System.out.println("Added");
-				} else{
-					System.out.println("Not Added");
+					pos_num++;
+					String[] snippetName= testCopy.instance(k).toString(0).split("_");
+					String parentName = snippetName[0]+"_"+snippetName[1]+"_"+snippetName[2]+"_"+snippetName[3];
+					//System.out.print("True, "+pos_num+", "+testCopy.instance(k).toString(0)+", "+parentName+", ");
+					if(!trueParentList.contains(parentName)){
+						trueParentList.add(parentName);
+					} 
+					sbSnippetTrue.append(testCopy.instance(k).toString(0)+"\n");
+				} else /*if(network.classifyInstance(test.instance(k))==0.0)*/{
+					neg_num++;
+					String[] snippetName= testCopy.instance(k).toString(0).split("_");
+					String parentName = snippetName[0]+"_"+snippetName[1]+"_"+snippetName[2]+"_"+snippetName[3];
+					//System.out.print("False, "+neg_num+", "+testCopy.instance(k).toString(0)+", "+parentName+", ");
+					if(!falseParentList.contains(parentName) && !trueParentList.contains(parentName)){
+						falseParentList.add(parentName);
+					}
+					sbSnippetFalse.append(testCopy.instance(k).toString(0)+"\n");
 				}
-				sbSnippetTrue.append(testCopy.instance(k).toString(0)+"\n");
-			} else /*if(network.classifyInstance(test.instance(k))==0.0)*/{
-				neg_num++;
-				String[] snippetName= testCopy.instance(k).toString(0).split("_");
-				String parentName = snippetName[0]+"_"+snippetName[1]+"_"+snippetName[2]+"_"+snippetName[3];
-				//System.out.print("False, "+neg_num+", "+testCopy.instance(k).toString(0)+", "+parentName+", ");
-				if(!falseParentList.contains(parentName) && !trueParentList.contains(parentName)){
-					falseParentList.add(parentName);
-					System.out.println("Added");
-				}else{
-                                        System.out.println("Not Added");
-                                }
-
-				sbSnippetFalse.append(testCopy.instance(k).toString(0)+"\n");
-			}
 		}
 
-		System.out.println("Full List ----------------------");
-		for(String s: fullList){
-			System.out.println(s);
-		}
-		System.out.println(fullList.size());
 		
 		//System.out.println("Before:\n TrueParentList:\n----------");
 		//for(String s : trueParentList){
@@ -211,15 +199,15 @@ public class WekaAdapter implements Prediction{
                 //}
 		//System.out.println("Size:"+falseParentList.size());
 		
-		ArrayList<String> falseParentTemp = new ArrayList<String>();
-		for (String s : falseParentList){
-			falseParentTemp.add(s);
-		}
-		for(String falseName : falseParentTemp){
-			if (trueParentList.contains(falseName)){
+//		ArrayList<String> falseParentTemp = new ArrayList<String>();
+//		for (String s : falseParentList){
+//			falseParentTemp.add(s);
+//		}
+//		for(String falseName : falseParentTemp){
+//			if (trueParentList.contains(falseName)){
 		//		falseParentList.remove(falseName);
-			}
-		}
+//			}
+//		}
 
 		//System.out.println("After:\n TrueParentList:\n---------");
                 //for(String s : trueParentList){
