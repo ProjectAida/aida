@@ -1,4 +1,8 @@
 #!/bin/bash
+cd src/
+javac execute/RunPageSegmentation.java
+cd ../
+
 beginYear=$1
 endYear=$2
 src=$(pwd)/src
@@ -9,7 +13,8 @@ for i in $( ls ); do
     echo $i
     for j in $( ls ); do
     year=`echo $j | awk -F "_|-" {'print $2'}`
-    if [ "$year" -ge "$beginYear" ] && [ "$year" -le "$endYear" ]
+    #if [ "$year" -ge "$beginYear" ] && [ "$year" -le "$endYear" ]
+    if [ 1 ]
     then
         cd $j
         echo $j
@@ -17,7 +22,7 @@ for i in $( ls ); do
             totalCount=$((totalCount + 1))
             current=$(pwd)
             cd $src
-            java execute/RunPageSegmentaion $current/$k
+            java execute/RunPageSegmentation $current/$k
             cd $current
         done
             cd ..

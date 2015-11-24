@@ -1,10 +1,7 @@
     #!/bin/bash
 
-cd src/
 echo "AIDA: Poem Identifier"
-javac execute/RunPageSegmentaion.java
-java execute/RunPageSegmentaion
-cd ../
+./RunPageSegmentation.sh
 
 cd data/
 find Output_Snippets/ -type f > snippetPathList.txt

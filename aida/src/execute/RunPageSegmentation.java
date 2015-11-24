@@ -20,7 +20,7 @@ import javax.imageio.ImageIO;
 import models.Image;
 import blurring.ImageBlurrer;
 
-public class RunPageSegmentaion {
+public class RunPageSegmentation {
 
 	/**
 	 * This main function is responsible for running the Full-page segmentation algorithm.
@@ -240,7 +240,7 @@ public class RunPageSegmentaion {
                 img.showColumnBreaks();
             }
             
-            //img.convertPageToSnippets(true);
+            img.convertPageToSnippets(true);
         } else {
             if(shouldShowColumns) {
                 img.showColumnBreaks();
