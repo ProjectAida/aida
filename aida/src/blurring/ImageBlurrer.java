@@ -25,6 +25,9 @@ import javax.imageio.ImageIO;
  *
  */
 public class ImageBlurrer {
+    
+    private final int DILATION_NUM = 6;
+    private final int EROSION_NUM = 8;
 
 	/**
 	 * This method imports the features (attributes) of the image passed as a parameter, and outputs a Attributes.csv with its values
@@ -219,17 +222,20 @@ public class ImageBlurrer {
 
 	}
 	
-	public void binarizeSegment(Image im, boolean shouldOutput){
+    /**
+     *Despite the name, this function is used for binarizing a full page image in preparation for segmentation.
+     *This function also takes in three Boolean flags that allow for the output of each of the three intermediary
+     *stages.
+    */
+	public void binarizeSegment(Image im, boolean shouldOutputContrasted, boolean shouldOutputBinary, boolean shouldOutputBinaryCleaned){
+        
 		int w = im.getHorizontal(), h = im.getVertical();
 		
 		BlurredImage bli = new BlurredImage(im);
 		bli.setBlurredImagePixels(im.getByteImage());
 		SingleThresholdFinder stf = new SingleThresholdFinder();
 		BinaryImage bni;
-//		ThresholdFinder tf = new ThresholdFinder();
-//		tf.createImageHistogram(bli);
-//		int threshold = tf.determineThreshold();
-		//System.out.println(threshold);
+        
 		long points = 0;
 		for(int a = 0; a < h; a++){
 			for(int b = 0; b < w; b++){
@@ -237,7 +243,6 @@ public class ImageBlurrer {
 			}
 		}
 		long average = points/(h*w);
-//		System.out.println(average);
 		
 		if(average > 120){
 			int pixels[][] = new int[h][w];
@@ -255,18 +260,20 @@ public class ImageBlurrer {
 				}
 			}
 			
-			BufferedImage OutputImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
-			
-			/***** This Segment is meant for printing out Binary images*****/
-			
-			for (int y = 0; y < h; y++) {
-				for (int x = 0; x < w; x++) {
-					//The following line offsets the pixels' values to fix the 'blue problem'
-					int value = pixels[y][x] << 16 | pixels[y][x] << 8 | pixels[y][x];
-					OutputImage.setRGB(x, y, value);
-				}
-			}
-			//outputImage(OutputImage, Constants.binaryOutput,"contrasted.jpg");
+            if(shouldOutputContrasted) {
+                BufferedImage OutputImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
+                
+                /***** This Segment is meant for printing out Binary images*****/
+                
+                for (int y = 0; y < h; y++) {
+                    for (int x = 0; x < w; x++) {
+                        //The following line offsets the pixels' values to fix the 'blue problem'
+                        int value = pixels[y][x] << 16 | pixels[y][x] << 8 | pixels[y][x];
+                        OutputImage.setRGB(x, y, value);
+                    }
+                }
+                outputImage(OutputImage, Constants.binaryOutput,"contrasted.jpg");
+            }
 			
 			bli.setBlurredImagePixels(pixels);
 			bni = stf.generateBinaryImage(bli);
@@ -274,46 +281,50 @@ public class ImageBlurrer {
 		else{
 			bni = stf.generateBinaryImage(bli);
 		}
-		BufferedImage OutputImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
+        
+        if(shouldOutputBinary) {
+            BufferedImage OutputImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
+            
+            /***** This Segment is meant for printing out Binary images*****/
+            int[][] pixels2 = bni.getBinaryImagePixels();
+            for (int y = 0; y < bni.getVertical(); y++) {
+                for (int x = 0; x < bni.getHorizontal(); x++) {
+                    //The following line offsets the pixels' values to fix the 'blue problem'
+                    int value = pixels2[y][x] << 16 | pixels2[y][x] << 8 | pixels2[y][x];
+                    OutputImage.setRGB(x, y, value);
+                }
+            }
+            outputImage(OutputImage, Constants.binaryOutput,"binary.jpg");
+        }
 
-		/***** This Segment is meant for printing out Binary images*****/
-		int[][] pixels2 = bni.getBinaryImagePixels();
-		for (int y = 0; y < bni.getVertical(); y++) {
-			for (int x = 0; x < bni.getHorizontal(); x++) {
-				//The following line offsets the pixels' values to fix the 'blue problem'
-				int value = pixels2[y][x] << 16 | pixels2[y][x] << 8 | pixels2[y][x];
-				OutputImage.setRGB(x, y, value);
-			}
-		}
-
-		//TODO Perform Erosion/Dilation on binary image before outputting
+		//Perform Erosion/Dilation on binary image before outputting
+        //To change the number of times Erosion or Dilation runs, simply change the constants
+        //located at the top of this file.
 		Morphology morph = new Morphology();
 		int[][] erodedPixels = bni.getBinaryImagePixels();
-		for(int i = 0; i < 5; i++){
+		for(int i = 0; i < DILATION_NUM; i++){
 			erodedPixels = morph.Dilation(erodedPixels);
 		}
-		for(int i = 0; i < 5; i++){
+		for(int i = 0; i < EROSION_NUM; i++){
 			erodedPixels = morph.Erosion(erodedPixels);
 		}
 		
 		bni.setBinaryImagePixels(erodedPixels);
 		
-		BufferedImage OutputImage2 = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
-		for (int y = 0; y < bni.getVertical(); y++) {
-			for (int x = 0; x < bni.getHorizontal(); x++) {
-				//The following line offsets the pixels' values to fix the 'blue problem'
-				int value = erodedPixels[y][x] << 16 | erodedPixels[y][x] << 8 | erodedPixels[y][x];
-				OutputImage2.setRGB(x, y, value);
-			}
-		}
+        if(shouldOutputBinaryCleaned) {
+            BufferedImage OutputImage2 = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
+            for (int y = 0; y < bni.getVertical(); y++) {
+                for (int x = 0; x < bni.getHorizontal(); x++) {
+                    //The following line offsets the pixels' values to fix the 'blue problem'
+                    int value = erodedPixels[y][x] << 16 | erodedPixels[y][x] << 8 | erodedPixels[y][x];
+                    OutputImage2.setRGB(x, y, value);
+                }
+            }
+            String baseName = im.getName().substring(0, im.getName().length()-4);
+            outputImage(OutputImage2, Constants.binaryOutput, baseName+"_cleaned.jpg");
+        }
 		
 		im.setByteImage(bni.getBinaryImagePixels());
-		
-		if(shouldOutput){
-			System.out.println("Writing Binary Image..");
-			outputImage(OutputImage, Constants.binaryOutput,"binary.jpg");
-			outputImage(OutputImage2, Constants.binaryOutput,"binary_cleaned.jpg");
-		}
 
 	}
 	

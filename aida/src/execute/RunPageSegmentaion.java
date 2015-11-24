@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.FileWriter;
+import java.io.BufferedWriter;
 
 import javax.imageio.ImageIO;
 
@@ -29,6 +30,7 @@ public class RunPageSegmentaion {
 	 */
 	public static void main(String[] args) {
 		if(args.length > 0){
+            //process images from a text file list
 			if(args[0].contains(".txt")){
 				String imageList = args[0];
 				File inputImages = new File(Constants.imageLists,imageList);
@@ -46,7 +48,7 @@ public class RunPageSegmentaion {
 						System.out.println("Image "+i);
 						Image img = importImage(line);
 						try{
-							segmentImage(img);
+							segmentImage(img, false);
 						}catch(RuntimeException r){
 							System.out.println("ERROR: Unable to segment "+img.getName()+"\nPlease make sure that the image isn't rotated and has good contrast");
 						}catch(Exception e){
@@ -58,17 +60,29 @@ public class RunPageSegmentaion {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+            //process only one image
 			}else if(args[0].contains(".jpg")){
 				Image img = importImage(args[0]);
 				try{
-					segmentImage(img);	
+					segmentImage(img, false);
 				} catch(Exception e){
 					e.printStackTrace();
 					//System.out.println("ERROR: Unable to segment "+img.getName()+"\nPlease make sure that the page isn't rotated");
 				}
 			}
+        //Process all images in the AIDA file structure created by the image retrieval script.
+        //Currently legacy code as we now have a script that will do this process using a bash script
+        //that repeatedly calls the process single image option.
 		}else{
 			File start = new File(Constants.fullPagePath);
+			File successFile = new File(Constants.successSegment);
+			BufferedWriter successStream = null;
+			try{
+				successStream = new BufferedWriter(new FileWriter(successFile,false));
+			}catch(Exception e){
+				System.out.println("Failed to create BufferedWriter");
+			}
+			StringBuilder sb = new StringBuilder();
 			File[] newspapers = start.listFiles(new FileFilter(){
 				@Override
 				public boolean accept(File file){
@@ -104,8 +118,9 @@ public class RunPageSegmentaion {
 							String path = image.getAbsolutePath();
 							Image img = importImage(path);
 							try{
-								segmentImage(img);
+								segmentImage(img, false);
 								System.out.print("\rSegmented: Newspaper "+currentPaper+"/"+numOfNewspapers+" Issue "+currentIssue+"/"+numOfIssues+" Image "+currentImage+"/"+numOfImages+" in "+file.getName()+"       ");
+								sb.append(img.getName()+"\n");
 							}catch(RuntimeException r){
 								System.out.println();
 								System.out.println("ERROR: Unable to segment "+img.getName()+"\nPlease make sure that the image isn't rotated and has good contrast");
@@ -143,7 +158,13 @@ public class RunPageSegmentaion {
 					}
 				}
 			}
-		
+			try{
+				successStream.append(sb.toString());
+				successStream.flush();
+				successStream.close();
+			}catch(Exception e){
+				System.out.println("Writing to file Failed. Unexpected error");
+			}
 		}
 	}
 
@@ -190,14 +211,66 @@ public class RunPageSegmentaion {
 	 * A helper method for grouping together the function calls for image segmentation.
 	 * @param img
 	 */
-	public static void segmentImage(Image img){
+	public static void segmentImage(Image img, boolean shouldShowColumns){
 		ImageBlurrer imb = new ImageBlurrer();
-		imb.binarizeSegment(img, true);
+        
+        //boolean values indicate if we want to output the intermediate stages of binarizing the image
+        //Stages: contrasted, binary, binary with Morphology
+		imb.binarizeSegment(img, false, false, false);
 		
-		img.findColumnBreaks();
-		System.out.println(img.getColumnBreaks());
-		img.showColumnBreaks();
-		
-		img.convertPageToSnippets(true);
+		int shouldContinue = img.findColumnBreaks();
+        System.out.println(shouldContinue);
+        
+        //Continue the process if image exited with no error
+        //Otherwise stop processing the image and output the custom error message to a file
+        if(shouldContinue == 0){
+            File output = new File(Constants.data, "imagePassed.txt");
+            try {
+                if(!output.exists()) {
+                    output.createNewFile();
+                }
+                FileWriter writer = new FileWriter(output, true);
+                writer.write(img.getName()+", "+img.getColumnBreaks()+"\n");
+                writer.close();
+            } catch(IOException ioe) {
+                ioe.printStackTrace();
+            }
+            
+            if(shouldShowColumns) {
+                img.showColumnBreaks();
+            }
+            
+            //img.convertPageToSnippets(true);
+        } else {
+            if(shouldShowColumns) {
+                img.showColumnBreaks();
+            }
+            String error = "";
+            switch(shouldContinue){
+                case 1:
+                    error = "No columns found, "+img.getColumnBreaks();
+                    break;
+                case 2:
+                    error = "Only one or two columns found, "+img.getColumnBreaks();
+                    break;
+                case 3:
+                    error = "Columns are only on half of the page, "+img.getColumnBreaks();
+                    break;
+                case 4:
+                	error = "Std Dev Above 150, "+img.getColumnBreaks();
+                	break;
+            }
+            File output = new File(Constants.data, "imageFailedNeedHuman.txt");
+            try {
+                if(!output.exists()) {
+                    output.createNewFile();
+                }
+                FileWriter writer = new FileWriter(output, true);
+                writer.write(img.getName()+", "+error+"\n");
+                writer.close();
+            } catch(IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
 	}
 }

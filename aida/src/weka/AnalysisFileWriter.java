@@ -295,7 +295,7 @@ public class AnalysisFileWriter {
 		sb.append(img5.getMarginMax()+",");
 		sb.append(img5.getMarginRange()+",");
 		
-    	sb.append(img5.getStanzaMean()+",");
+	    	sb.append(img5.getStanzaMean()+",");
 		sb.append(img5.getStanzaStdDev()+",");
 		sb.append(img5.getStanzaMin()+",");
 		sb.append(img5.getStanzaMax()+",");
@@ -320,7 +320,7 @@ public class AnalysisFileWriter {
 		sb.append(img7.getMarginMax()+",");
 		sb.append(img7.getMarginRange()+",");
 		
-    	sb.append(img7.getStanzaMean()+",");
+    		sb.append(img7.getStanzaMean()+",");
 		sb.append(img7.getStanzaStdDev()+",");
 		sb.append(img7.getStanzaMin()+",");
 		sb.append(img7.getStanzaMax()+",");
