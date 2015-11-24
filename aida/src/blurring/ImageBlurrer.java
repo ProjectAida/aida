@@ -222,6 +222,11 @@ public class ImageBlurrer {
 
 	}
 	
+    /**
+     *Despite the name, this function is used for binarizing a full page image in preparation for segmentation.
+     *This function also takes in three Boolean flags that allow for the output of each of the three intermediary
+     *stages.
+    */
 	public void binarizeSegment(Image im, boolean shouldOutputContrasted, boolean shouldOutputBinary, boolean shouldOutputBinaryCleaned){
         
 		int w = im.getHorizontal(), h = im.getVertical();
@@ -230,10 +235,7 @@ public class ImageBlurrer {
 		bli.setBlurredImagePixels(im.getByteImage());
 		SingleThresholdFinder stf = new SingleThresholdFinder();
 		BinaryImage bni;
-//		ThresholdFinder tf = new ThresholdFinder();
-//		tf.createImageHistogram(bli);
-//		int threshold = tf.determineThreshold();
-		//System.out.println(threshold);
+        
 		long points = 0;
 		for(int a = 0; a < h; a++){
 			for(int b = 0; b < w; b++){
@@ -241,7 +243,6 @@ public class ImageBlurrer {
 			}
 		}
 		long average = points/(h*w);
-//		System.out.println(average);
 		
 		if(average > 120){
 			int pixels[][] = new int[h][w];
@@ -271,7 +272,7 @@ public class ImageBlurrer {
                         OutputImage.setRGB(x, y, value);
                     }
                 }
-                //outputImage(OutputImage, Constants.binaryOutput,"contrasted.jpg");
+                outputImage(OutputImage, Constants.binaryOutput,"contrasted.jpg");
             }
 			
 			bli.setBlurredImagePixels(pixels);
@@ -296,7 +297,9 @@ public class ImageBlurrer {
             outputImage(OutputImage, Constants.binaryOutput,"binary.jpg");
         }
 
-		//TODO Perform Erosion/Dilation on binary image before outputting
+		//Perform Erosion/Dilation on binary image before outputting
+        //To change the number of times Erosion or Dilation runs, simply change the constants
+        //located at the top of this file.
 		Morphology morph = new Morphology();
 		int[][] erodedPixels = bni.getBinaryImagePixels();
 		for(int i = 0; i < DILATION_NUM; i++){

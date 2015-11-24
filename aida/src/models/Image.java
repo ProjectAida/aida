@@ -403,64 +403,46 @@ public class Image {
 				columns.add(whiteColumns.get(index));
 			}
 		}
-		
-		int count = 0;
-		int mean = 0;
-		for(int p = 0; p < columns.size()-1; p++){
-			mean += (columns.get(p+1)-columns.get(p));
-			count++;
-		}
-		mean = mean/count;
-		int vari = 0;
-		for(int p = 0; p < columns.size()-1; p++){
-			vari += Math.pow((columns.get(p+1)-columns.get(p))-mean, 2);
-		}
-		double stdDev = Math.ceil(Math.sqrt(vari/count));
-		int check = 0;
-		for(int l = 0; l < columns.size()-1; l++){
-			int dist = columns.get(l+1)-columns.get(l);
-			if(dist < mean-stdDev || dist > mean+stdDev){
-				check++;
-			}
-		}
-//		if(check > 0){
-			ArrayList<Integer> blackColumns = new ArrayList<Integer>();
-			for(int m = 0; m < this.horizontal; m++){
-				int blackContinuous = 0;
-				int maxBlack = 0;
-				int prev = 255;
-				for(int n = 0; n < this.vertical; n++){
-					if(this.byteImage[n][m] == 0 && prev == 0){
-						blackContinuous++;
-					}else if(this.byteImage[n][m] != 0 && prev == 0){
-						if(maxBlack < blackContinuous){
-							maxBlack = blackContinuous;
-						}
-						blackContinuous = 0;
-						prev = 255;
-					}else if(this.byteImage[n][m] == 0 && prev == 255){
-						blackContinuous++;
-						prev = 0;
-					}
-				}
-				if(maxBlack >= (this.vertical * .1) && m > columns.get(0)){
-					blackColumns.add(m);
-				}
-			}
-			marker = 0;
-			for(int k = 0; k < blackColumns.size()-1; k++){
-				if(blackColumns.get(k+1) - blackColumns.get(k) > BLACK_COLUMN_SEPARATION_MIN){
-					int index = k-((k - marker)/2);
-					columns.add(blackColumns.get(index));
-					marker = k+1;
-				}
-			}
-			Collections.sort(columns);
-//		}
+
+        //Using white columns often isn't enough, so we check for continuous
+        //black lines as well to indictate a column break.
+        ArrayList<Integer> blackColumns = new ArrayList<Integer>();
+        for(int m = 0; m < this.horizontal; m++){
+            int blackContinuous = 0;
+            int maxBlack = 0;
+            int prev = 255;
+            for(int n = 0; n < this.vertical; n++){
+                if(this.byteImage[n][m] == 0 && prev == 0){
+                    blackContinuous++;
+                }else if(this.byteImage[n][m] != 0 && prev == 0){
+                    if(maxBlack < blackContinuous){
+                        maxBlack = blackContinuous;
+                    }
+                    blackContinuous = 0;
+                    prev = 255;
+                }else if(this.byteImage[n][m] == 0 && prev == 255){
+                    blackContinuous++;
+                    prev = 0;
+                }
+            }
+            if(maxBlack >= (this.vertical * .1) && m > columns.get(0)){
+                blackColumns.add(m);
+            }
+        }
+        marker = 0;
+        for(int k = 0; k < blackColumns.size()-1; k++){
+            if(blackColumns.get(k+1) - blackColumns.get(k) > BLACK_COLUMN_SEPARATION_MIN){
+                int index = k-((k - marker)/2);
+                columns.add(blackColumns.get(index));
+                marker = k+1;
+            }
+        }
+        Collections.sort(columns);
         
 		ArrayList<Integer> columnsToAdd = new ArrayList<Integer>();
 		ArrayList<Integer> columnsToRemove = new ArrayList<Integer>();
 		
+        //Determine extraneuous columns to remove
 		int index = 0;
 		while(columns.get(index) < EDGE_COLUMN_DISTANCE_MAX){
 			columnsToRemove.add(columns.get(index));
@@ -473,6 +455,9 @@ public class Image {
 		}
 		columns.removeAll(columnsToRemove);
 		columnsToRemove.clear();
+        
+        //If columns are very close together remove the two columns and use
+        //the average of the two for the final list of columns
 		for(int p = 0; p < columns.size()-1; p++){
 			if(columns.get(p+1)-columns.get(p) < COLUMN_SEPARATION_MIN){
 				columnsToRemove.add(columns.get(p));
@@ -493,22 +478,13 @@ public class Image {
             return 1;
         }
         
-//		for(int p = 1; p < columns.size()-1; p++){
-//			if(columns.get(p)-columns.get(p-1) < mean-10){
-//				if(columns.get(p+1)-columns.get(p-1) < mean+(stdDev) && columns.get(p+1)-columns.get(p-1) > mean-stdDev){
-////					columnsToRemove.add(columns.get(p));
-//					columns.remove(p);
-//					p--;
-//				}
-//			}
-//		}
 		ArrayList<Integer> columnWidth = new ArrayList<Integer>();
 		for(int p = 0; p < columns.size()-1; p++){
 			columnWidth.add(columns.get(p+1)-columns.get(p));
 		}
 		Collections.sort(columnWidth);
         
-        //Rule : check for less than three columns and check if columns are on more than half of the page
+        //Rule 2,3: check for less than three columns and check if columns are on more than half of the page
         if(columns.size()<3){
             this.setColumnBreaks(columns);
             return 2;
@@ -535,12 +511,13 @@ public class Image {
         double columnWidthStdDev = Math.ceil(Math.sqrt(columnWidthVarience));
         System.out.println("Std Dev: "+columnWidthStdDev);
         
-        //Rule : Check column width Std Dev. Good images were experimentally determined to be below 150 Std Dev.
+        //Rule 4: Check column width Std Dev. Good images were experimentally determined to be below 150 Std Dev.
         if(columnWidthStdDev > 150) {
             this.setColumnBreaks(columns);
             return 4;
         }
         
+        //Add in columns based on the average width, columns added from the right hand side
 		int averageWidth = columnWidth.get((int) Math.floor(columnWidth.size()/2));
 		for(int p = columns.size()-1; p >= 1; p--){
 			if(columns.get(p-1) < columns.get(p)-averageWidth-COLUMN_SEPARATION_MIN){
@@ -554,6 +531,7 @@ public class Image {
 			}
 		}
 		
+        //If no edge column is found, insert the column
         while(columns.get(0) > this.horizontal*.1 && columns.get(0)-averageWidth > 0){
             columns.add(0, columns.get(0)-averageWidth);
         }
@@ -562,7 +540,6 @@ public class Image {
         }
         
 		System.out.println(columns);
-//		columns.removeAll(columnsToRemove);
 		
 		//stores the column breaks list in the class Image
 		this.setColumnBreaks(columns);

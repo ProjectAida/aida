@@ -30,6 +30,7 @@ public class RunPageSegmentaion {
 	 */
 	public static void main(String[] args) {
 		if(args.length > 0){
+            //process images from a text file list
 			if(args[0].contains(".txt")){
 				String imageList = args[0];
 				File inputImages = new File(Constants.imageLists,imageList);
@@ -59,6 +60,7 @@ public class RunPageSegmentaion {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+            //process only one image
 			}else if(args[0].contains(".jpg")){
 				Image img = importImage(args[0]);
 				try{
@@ -68,6 +70,9 @@ public class RunPageSegmentaion {
 					//System.out.println("ERROR: Unable to segment "+img.getName()+"\nPlease make sure that the page isn't rotated");
 				}
 			}
+        //Process all images in the AIDA file structure created by the image retrieval script.
+        //Currently legacy code as we now have a script that will do this process using a bash script
+        //that repeatedly calls the process single image option.
 		}else{
 			File start = new File(Constants.fullPagePath);
 			File successFile = new File(Constants.successSegment);
@@ -208,11 +213,16 @@ public class RunPageSegmentaion {
 	 */
 	public static void segmentImage(Image img, boolean shouldShowColumns){
 		ImageBlurrer imb = new ImageBlurrer();
+        
+        //boolean values indicate if we want to output the intermediate stages of binarizing the image
+        //Stages: contrasted, binary, binary with Morphology
 		imb.binarizeSegment(img, false, false, false);
 		
 		int shouldContinue = img.findColumnBreaks();
         System.out.println(shouldContinue);
         
+        //Continue the process if image exited with no error
+        //Otherwise stop processing the image and output the custom error message to a file
         if(shouldContinue == 0){
             File output = new File(Constants.data, "imagePassed.txt");
             try {
