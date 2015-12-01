@@ -12,19 +12,19 @@ import java.util.HashSet;
  * This class generates the results for the parent images, its accuracies and precision etc by comparing the 
  * names of the snippets identified as positive and an existing list of all true parent images.
  * @author mdatla
- *
+ * See written report explaining in detail the process taking place for additional information.
  */
 public class FinalResultGenerator {
 
 	public void generateResults(){
-		String temp= "";
 		try {
-			BufferedReader truePageReader = new BufferedReader(new FileReader(Constants.data+"TruePages.txt"));
-			BufferedReader falsePageReader = new BufferedReader(new FileReader(Constants.data+"FalsePages.txt"));
-			BufferedReader actualReader = new BufferedReader(new FileReader(Constants.data+"labelledImages.txt"));
+			// Three readers are used to read three separate files. Each file consists intermediate data from WekaAdapter and also the required labelledImages.txt
+			BufferedReader truePageReader = new BufferedReader(new FileReader(Constants.data+"TruePages.txt"));    // Reads in files classified as true by WEKA
+			BufferedReader falsePageReader = new BufferedReader(new FileReader(Constants.data+"FalsePages.txt"));  // Reads in files classified as false by WEKA
+			BufferedReader actualReader = new BufferedReader(new FileReader(Constants.data+"labelledImages.txt")); // Reads in files with their actual accurate classification
 			String line2 = null;
-			HashSet<String> TrueList = new HashSet<String>();
-			HashSet<String> FalseList = new HashSet<String>();
+			HashSet<String> TrueList = new HashSet<String>();	// HashSets automatically prevent duplication.Acts as a safety net in case our duploication check fails.
+			HashSet<String> FalseList = new HashSet<String>();	// These lists are the reference lists to generate the accuracy rates and confusion matrix.
 			int actualTrues=0,actualFalses=0;
 			while ((line2=actualReader.readLine())!=null){
 				if(line2.contains("true.jpg")){
@@ -38,7 +38,7 @@ public class FinalResultGenerator {
 			String line=null;
 			double i=1,truePositives=0,falsePositives=0,trueNegatives=0,falseNegatives=0,total=0;
 			HashSet<String> classTrue = new HashSet<String>();
-			HashSet<String> classFalse = new HashSet<String>();
+			HashSet<String> classFalse = new HashSet<String>();	// These lists are populated according to the classifer. 
 			
 			while((line=truePageReader.readLine())!=null){
 				classTrue.add(line);
@@ -48,7 +48,7 @@ public class FinalResultGenerator {
 				classFalse.add(line);
 			}
 
-			
+			// Remove cross-list duplication. (Removes elements from classFalse that also exist in classTrue
 			HashSet<String> falseTemp = new HashSet(classFalse);
 			for (String s: classFalse){
 				if (classTrue.contains(s)){
@@ -57,7 +57,7 @@ public class FinalResultGenerator {
 			}
 			classFalse = new HashSet(falseTemp);
 
-			
+			// # of truePositives, trueNegative etc are counted here to generate confusion matrix later.
 			for(String s: classTrue){
 				total++;
 				boolean contains = false;
@@ -88,6 +88,7 @@ public class FinalResultGenerator {
 				}
 			}
 			
+			// Output area. Formulae used are from wikipedia article for "Precision and Recall". More specifically they are taken from 'Terminology and Derivations..' section
 			System.out.println("truePositives: "+truePositives);
 			System.out.println("falsePositives: "+falsePositives);
 			System.out.println("Total Positive Predicted: "+ (truePositives + falsePositives));

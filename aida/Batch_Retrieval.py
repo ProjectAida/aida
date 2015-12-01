@@ -193,6 +193,13 @@ def convertToJpg():
     else:
         print("All images converted successfully")
 
-buildFullManifest()
-getImages(1841, 1841)
-convertToJpg()
+
+if sys.argv[1] == 1:
+    buildFullManifest()
+    getImages(sys.argv[2], sys.argv[3])
+    convertToJpg()
+elif sys.argv[1] == 2:
+    getImages(sys.argv[2], sys.argv[3])
+    convertToJpg()
+elif sys.argv[1] == 3:
+    buildFullManifest()

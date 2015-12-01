@@ -21,14 +21,30 @@ REQUIREMENTS
 INSTALLATION
 ------------
 
-1. Move directory 'PoemIdentifier_Full_v1.0' into desired location.
-2. edit Constants.java in 'src/global'and change filepaths to PoemIdentifier
-   depending on the location of the directory. The program uses these filepaths
-   to find the appropriate files.
-3. Place Full size newspaper images into 'data/Newspaper Images'
-4. Pipe the filenames into 'Image_lists/FullImageList.txt'
-5. Open a terminal in 'PoemIdentifier_Full_v1.0/' and run the script 'RunAll.sh'
-   by typing './RunAll.sh' into the terminal.
+1. Move directory 'aida/' into desired location.
+2. Run the retrieval by running (without quotes):
+
+	'python Batch_Retrieval.py <flag> <begin year> <end year>'
+ 	
+	use <flag> to specify which functions to run. 
+	flag = 1 for run build manifest, get images and convert to *.jpg
+	flag = 2 for get images and convert to *.jpg (use if manifest already exists)
+	flag = 3 for build manifest only 
+
+3. Select desired options in using command line arguments in the script files (*.sh)
+	Find the line containing :"java execute/RunProgram <flag1> <flag2> $i"
+	flag1 is used to indicate which version of blurring to use (357, or 5)
+	flag2 is used to indicate whether to use regular blurring or custom blurring
+4. To run entire program, run the script by running the command:
+
+	'./RunAll.sh'
+
+   in a terminal (without quotes) while in the parent directory. 
+
+5. To run a different version for a more specific purpose run these scripts
+	
+	'./runImageProcess.sh'
+	'./RunPageSegementation.sh'
 
 NOTES
 -----
@@ -42,3 +58,25 @@ DEVELOPER NOTES
 1. Snippets for images in data/FullImages are placed in data/Output_Snippets/
 2. A list of filepaths for these files is created and placed in SnippetPathList.txt
 
+FILES AND FOLDERS
+-----------------
+>aida
+	>data
+		>Analysis : Folder containing .arff files
+		>Output_Snippets : Folder contains snippets generated from segmentation algorithm
+		>Output_Custom : Folder contains custom blurred images
+		>Output_Binary : Folder contains binary images
+		>FullPages : Folder where Full newspaper images downloaded from CA
+		>TrainImages : Images used for Training set.
+	>src : Folder containing all source code.
+		>blurring : Package containing classes resposible for different types of blurring
+		>execute : Package containing classes responsible execution of various processes.
+		>featureExtraction: Package containing classes responsible for analyzing features.
+		>global : Package contains Constants class that holds the filepaths for various locations.
+		>models : Package contains Model classes that represents various types of images.
+		>processHelpers : Package contains classes reposible for determining thresholds.
+		>weka : Package containing classes resposible for weka ANN and results.
+	>weka_jar : directory contains the .jar files for weka.
+	>RunAll.sh : Runs all processes
+	>runImageProcess.sh : Runs Maanas' Image Process only.
+	>runSegmentation.sh : Runs Spencer's Segmentation algorithm only. 
