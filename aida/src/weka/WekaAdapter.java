@@ -118,7 +118,7 @@ public class WekaAdapter implements Prediction{
 		Instances trainSetCopy = new Instances(trainSet, 0, trainSet.numInstances());
 		trainSet.deleteAttributeAt(0);
 		Instances testSetCopy = new Instances(testSet, 0, testSet.numInstances());
-		testSet.deleteAttributeAt(0);
+		//testSet.deleteAttributeAt(0);
 
 
 		File trueSnippetOut = new File(Constants.data,"TrueSnippets.txt");
