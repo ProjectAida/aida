@@ -15,7 +15,7 @@ public class RunTraining {
 		
 		
 		//Arguments to wekaAdapter: WekaAdapter(training_datasetPath, testing_datasetPath)
-		
+		// First argument is the dataset that will be used to create the classifier. and second argumnt is used for testing
 		WekaAdapter wa = new WekaAdapter(Constants.analysisFileDirectory+"TrainList.arff",Constants.analysisFileDirectory+"TestList.arff");
 		try {
 			System.out.println("Reading Dataset...");

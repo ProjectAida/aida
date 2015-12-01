@@ -47,9 +47,10 @@ public class RunProgram {
 
 		// Manual Controls
 		int blurMode = consolidated;	// tripleRegular or consolidated
-		int whatSet = train;			// 'test' for testing set of 7500+ snippets. 'train' for 400 training snippets
+		int whatSet = test;			// 'test' for testing set of 7500+ snippets. 'train' for 400 training snippets
 		boolean outCustom = true;		// Set true output the image, false when output of images themselves is not necessary
-		boolean outBinary = true;
+		boolean outBinary = true;		// Set true to output binary images
+		boolean outBlurred= false;		// Set true to output blurred images.
 		
 		if (blurMode == consolidated){
 			isCustom = true;
@@ -126,7 +127,7 @@ public class RunProgram {
 
 		//		---------------------------------------------------------------------------
 
-		imb.blurImage(img5 ,false);
+		imb.blurImage(img5 ,outBlurred);
 		imb.binarizeImage(img5, outBinary);
 		if(isCustom){
 			imb.customBlur(img5,outCustom);
@@ -144,7 +145,7 @@ public class RunProgram {
 
 		if(blurMode == tripleRegular){
 			
-			imb.blurImage(img3 ,false);
+			imb.blurImage(img3 ,outBlurred);
 			imb.binarizeImage(img3, outBinary);
 			if(isCustom){
 				imb.customBlur(img3,outCustom);
@@ -159,7 +160,7 @@ public class RunProgram {
 
 			//		-----------------------------------------------------------------------------
 
-			imb.blurImage(img7 ,false);
+			imb.blurImage(img7 ,outBlurred);
 			imb.binarizeImage(img7, outBinary);
 			if(isCustom){
 				imb.customBlur(img7,outCustom);
