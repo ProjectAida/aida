@@ -1,8 +1,13 @@
-import urllib
-import urllib2
+#! /usr/bin/python
+
+from datetime import datetime
+from pgmagick import Image
 import os
 import sys
-from pgmagick import Image
+import urllib
+import urllib2
+
+manifest_file = "Master_Manifest.txt"
 
 #This function creates a manifest containing the web urls of every jp2 image of a newspaper page.
 #It does this by first navigating to the html page that links to each of the batch folders, then scrubs
@@ -27,50 +32,63 @@ def buildFullManifest():
     length = len(listOfBatchURLS)
     count = 0
     print "starting processing"
+    openf = open(manifest_file, "a")
+    log = open("build_manifest_log.txt", "a")
     for j in listOfBatchURLS:
         count += 1
-        sys.stdout.write("\rProcessing "+str(count)+"/"+str(length)+" batch manifests")
+        sys.stdout.write("\rProcessing "+str(count)+"/"+str(length)+" batch manifests (current: "+j+")")
         sys.stdout.flush()
+        # try to open sha1 manifest file, but if it isn't there, then try md5 file instead
         try:
             socket = urllib2.urlopen(j+"manifest-sha1.txt")
         except urllib2.HTTPError, err:
-            if err.code == 404:
+            if err.code == 404 or err.code == 503:
                 try:
                     socket = urllib2.urlopen(j+"manifest-md5.txt")
                 except urllib2.HTTPError, e:
-                    print "Error HTTP: "+e.code
-                    print "This is bad the manifest for batch "+j+" could not be acquired!!!"
+                    print "Error HTTP: "+ str(e.code)
+                    print "This is bad the manifest for batch "+j+" could not be acquired!!!\n"
+                    log.write("Batch " + j + " failed: " + str(e.code) + "\n")
             else:
-                raise
-        manifest = socket.readlines()
-        socket.close()
-        fullDataPaths = []
-        for k in manifest:
-            partialDataPath = k.split()
-            if partialDataPath[1].endswith('.jp2') and partialDataPath[1].count('/') == 4:
-                fullDataPaths.append(j+partialDataPath[1]+'\n')
-                fullDataPaths.sort()
-        openf = open("Master_Manifest.txt", "a")
-        openf.writelines(fullDataPaths)
-        openf.close()
-    print ""
+                print "Encountered an error when accessing the url: " + str(err.code) + "\n"
+                log.write("Batch " + j + "failed: " + str(err.code) + "\n")
+        except Exception as e:
+            print "Error: " + str(e)
+            print "Unable to make manifest for batch " + j + "\n"
+            log.write("Batch " + j + " failed: " + str(e) + "\n")
+        try:
+            manifest = socket.readlines()
+            socket.close()
+            fullDataPaths = []
+            for k in manifest:
+                partialDataPath = k.split()
+                if partialDataPath[1].endswith('.jp2') and partialDataPath[1].count('/') == 4:
+                    fullDataPaths.append(j+partialDataPath[1]+'\n')
+                    fullDataPaths.sort()
+            
+            openf.writelines(fullDataPaths)
+        except Exception as e:
+            print "Encountered an error with batch " + j + " : "+ str(e) + "\n"
+            log.write("Batch " + j + " failed: " + str(e) + "\n")
+    openf.close()
+    log.close()
 
 #This function, when given a begin year and an end year, will search through the full Manifest file
 #and download all images within a year range. For one year, the same year is used for both parameters.
 #The images are downloaded to the folowing directory structure: data/FullPages/BatchLevel/IssueLevel/PageLevel
 #This function also uses wget (or curl for macs) in order to download images, this is due to complications on the
 #Library of Congress's server and urllib being unable to handle requests from them.
-def getImages(startYear = 1836, endYear = 2015):
+def getImages(startYear = 1836, endYear = datetime.now().year):
     Error404 = []
     imageCount = 0
-    with open("Master_Manifest.txt", "r") as masterManifest:
+    with open(manifest_file, "r") as masterManifest:
         for line in masterManifest:
             lineList = line.split('/')
             imageYear = int(lineList[9][:4])
             if imageYear >= startYear and imageYear <= endYear:
                 imageCount += 1
 
-    with open("Master_Manifest.txt", "r") as masterManifest:
+    with open(manifest_file, "r") as masterManifest:
         previousLine = ""
         pageCount = 1
         fullCount = 0
@@ -193,13 +211,29 @@ def convertToJpg():
     else:
         print("All images converted successfully")
 
+def usage():
+    print("Usage: python Batch_Retrieval.py [1 | 2 | 3] [YYYY] [YYYY]")
+    print("    1 - build manifest and get images")
+    print("    2 - get images only")
+    print("    3 - build manifest only")
+    print("    YYYY - Year beginning and ending (may use same year for both)")
+    print("Examples:")
+    print("    ./Batch_Retrieval.py 1 1938 1938")
+    print("    ./Batch_Retrieval.py 3")
 
-if sys.argv[1] == 1:
+if len(sys.argv) == 1:
+    usage()
+elif sys.argv[1] == "1":
+    print("Preparing to build manifest and get images")
     buildFullManifest()
     getImages(sys.argv[2], sys.argv[3])
     convertToJpg()
-elif sys.argv[1] == 2:
+elif sys.argv[1] == "2":
+    print("Preparing to get images")
     getImages(sys.argv[2], sys.argv[3])
     convertToJpg()
-elif sys.argv[1] == 3:
+elif sys.argv[1] == "3":
+    print("Preparing to build manifest")
     buildFullManifest()
+else:
+    usage()

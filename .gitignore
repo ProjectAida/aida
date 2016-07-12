@@ -4,18 +4,11 @@
 aida/data/Analysis/*
 *.class
 
-aida/src/.DS_Store
-
-aida/src/global/.DS_Store
-
-aida/src/blurring/.DS_Store
-
-aida/src/execute/.DS_Store
-
-aida/src/featureExtraction/.DS_Store
-
-aida/src/models/.DS_Store
+.DS_Store
 
 aida/data/imageFailedNeedHuman.txt
 
 aida/data/imagePassed.txt
+
+Master_Manifest.txt
+build_manifest_log.txt
