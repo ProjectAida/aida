@@ -15,6 +15,10 @@ manifest_file = "Master_Manifest.txt"
 #to each batch folder and loads up the manifest for that batch, retrieves the urls for the images from the manifest
 #and appends them to the full manifest file.
 def buildFullManifest():
+    # remove existing manifest file in order to prevent appending to it
+    if os.path.exists(manifest_file):
+        print "Deleted " + manifest_file + " and generating new one"
+        os.remove(manifest_file)
     print "Getting batch urls"
     batchesURL = "http://chroniclingamerica.loc.gov/data/batches/"
     sock = urllib.urlopen(batchesURL)
