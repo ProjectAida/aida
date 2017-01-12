@@ -45,15 +45,12 @@ INSTALLATION
 
 NOTES
 -----
+* Snippets for images in data/FullImages are placed in data/Output_Snippets/
+* A list of filepaths for these files is created and placed in SnippetPathList.txt
 * .arff outputs are stored in data/Analysis.
 * Standard out is used for final results.
 * If using IDE, run the command line script first before running the file in
   the IDE.
-
-DEVELOPER NOTES
----------------
-1. Snippets for images in data/FullImages are placed in data/Output_Snippets/
-2. A list of filepaths for these files is created and placed in SnippetPathList.txt
 
 FILES AND FOLDERS
 -----------------
