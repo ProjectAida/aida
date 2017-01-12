@@ -1,6 +1,5 @@
-CONTENTS OF THIS FILE
+CONTENTS
 ----------------------
-
 * Introduction
 * Requirements
 * Installation
@@ -14,13 +13,11 @@ Artificial Neural Network
 
 REQUIREMENTS
 ------------
-
 * Java Runtime 1.5 or higher
 * Unix based system architecture
 
 INSTALLATION
 ------------
-
 1. Move directory 'aida/' into desired location.
 2. Run the retrieval by running (without quotes):
 
