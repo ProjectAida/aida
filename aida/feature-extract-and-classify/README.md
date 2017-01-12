@@ -43,8 +43,8 @@ INSTALLATION
 
 5. To run a different version for a more specific purpose run these scripts
 	
-	'./runImageProcess.sh'
-	'./RunPageSegementation.sh'
+	* './runImageProcess.sh'
+	* './RunPageSegementation.sh' -- Runs through the file hierarchy containing the jpg images and runs the page segmentation process on each image individually
 
 NOTES
 -----
