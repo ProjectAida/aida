@@ -45,15 +45,6 @@ INSTALLATION
 	* './runImageProcess.sh'
 	* './RunPageSegementation.sh' -- Runs through the file hierarchy containing the jpg images and runs the page segmentation process on each image individually
 
-NOTES
------
-* Snippets for images in data/FullImages are placed in data/Output_Snippets/
-* A list of filepaths for these files is created and placed in SnippetPathList.txt
-* .arff outputs are stored in data/Analysis.
-* Standard out is used for final results.
-* If using IDE, run the command line script first before running the file in
-  the IDE.
-
 Directories and Files
 -----------------
 aida  
@@ -76,3 +67,12 @@ aida
 + RunAll.sh : Runs all processes  
 + runImageProcess.sh : Runs Maanas' Image Process only.  
 + runSegmentation.sh : Runs Spencer's Segmentation algorithm only.  
+
+NOTES
+-----
+* Snippets for images in data/FullImages are placed in data/Output_Snippets/
+* A list of filepaths for these files is created and placed in SnippetPathList.txt
+* .arff outputs are stored in data/Analysis.
+* Standard out is used for final results.
+* If using IDE, run the command line script first before running the file in
+  the IDE.
