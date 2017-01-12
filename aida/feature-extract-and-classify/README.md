@@ -54,7 +54,7 @@ NOTES
 * If using IDE, run the command line script first before running the file in
   the IDE.
 
-FILES AND FOLDERS
+Directories and Files
 -----------------
 aida  
 + data  
