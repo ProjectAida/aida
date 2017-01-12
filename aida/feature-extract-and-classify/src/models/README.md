@@ -1,3 +1,6 @@
+Package containing Model classes that represent various types of images.
+
+
 Image.java has three main functions: findColumnBreaks, showColumns, and convertPageToSnippets. 
 * findColumnBreaks takes in a binarized image and finds the column breaks
 * showColumns outputs an image with red lines where the found columns are located
