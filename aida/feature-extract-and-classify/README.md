@@ -60,23 +60,23 @@ DEVELOPER NOTES
 
 FILES AND FOLDERS
 -----------------
->aida
-	>data
-		>Analysis : Folder containing .arff files
-		>Output_Snippets : Folder contains snippets generated from segmentation algorithm
-		>Output_Custom : Folder contains custom blurred images
-		>Output_Binary : Folder contains binary images
-		>FullPages : Folder where Full newspaper images downloaded from CA
-		>TrainImages : Images used for Training set.
-	>src : Folder containing all source code.
-		>blurring : Package containing classes resposible for different types of blurring
-		>execute : Package containing classes responsible execution of various processes.
-		>featureExtraction: Package containing classes responsible for analyzing features.
-		>global : Package contains Constants class that holds the filepaths for various locations.
-		>models : Package contains Model classes that represents various types of images.
-		>processHelpers : Package contains classes reposible for determining thresholds.
-		>weka : Package containing classes resposible for weka ANN and results.
-	>weka_jar : directory contains the .jar files for weka.
-	>RunAll.sh : Runs all processes
-	>runImageProcess.sh : Runs Maanas' Image Process only.
-	>runSegmentation.sh : Runs Spencer's Segmentation algorithm only. 
+>aida  
+	>data  
+		>Analysis : Folder containing .arff files  
+		>Output_Snippets : Folder contains snippets generated from segmentation algorithm  
+		>Output_Custom : Folder contains custom blurred images  
+		>Output_Binary : Folder contains binary images  
+		>FullPages : Folder where Full newspaper images downloaded from CA  
+		>TrainImages : Images used for Training set.  
+	>src : Folder containing all source code.  
+		>blurring : Package containing classes resposible for different types of blurring  
+		>execute : Package containing classes responsible execution of various processes.  
+		>featureExtraction: Package containing classes responsible for analyzing features.  
+		>global : Package contains Constants class that holds the filepaths for various locations.  
+		>models : Package contains Model classes that represents various types of images.  
+		>processHelpers : Package contains classes reposible for determining thresholds.  
+		>weka : Package containing classes resposible for weka ANN and results.  
+	>weka_jar : directory contains the .jar files for weka.  
+	>RunAll.sh : Runs all processes  
+	>runImageProcess.sh : Runs Maanas' Image Process only.  
+	>runSegmentation.sh : Runs Spencer's Segmentation algorithm only.  
