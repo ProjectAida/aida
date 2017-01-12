@@ -3,6 +3,8 @@ CONTENTS
 * Introduction
 * Requirements
 * Installation
+* Directories and Files
+* Notes
 
 
 INTRODUCTION
