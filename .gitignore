@@ -6,11 +6,9 @@ aida/feature-extract-and-classify/data/Analysis/*
 
 .DS_Store
 
-aida/feature-extract-and-classify/data/*.txt
+aida/data/imageFailedNeedHuman.txt
 
-aida/feature-extract-and-classify/data/imageFailedNeedHuman.txt
-
-aida/feature-extract-and-classify/data/imagePassed.txt
+aida/data/imagePassed.txt
 
 Master_Manifest.txt
 build_manifest_log.txt
