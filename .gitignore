@@ -3,6 +3,8 @@
 *.arff
 *.class
 
+aida/feature-extract-and-classify/data/
+!aida/feature-extract-and-classify/data/.keep
 aida/feature-extract-and-classify/data/*.txt
 aida/feature-extract-and-classify/data/Analysis/*.arff
 aida/feature-extract-and-classify/data/Analysis/*.csv
