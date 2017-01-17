@@ -1,1 +1,11 @@
-.DS_Store
+*.DS_Store
+*.jpg
+*.arff
+*.class
+
+aida/feature-extract-and-classify/data/*.txt
+aida/feature-extract-and-classify/data/Analysis/*.arff
+aida/feature-extract-and-classify/data/Analysis/*.csv
+
+#Master_Manifest.txt
+#build_manifest_log.txt
