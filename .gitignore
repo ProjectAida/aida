@@ -1,7 +1,7 @@
 *.jpg
 *.json
 *.arff
-aida/data/Analysis/*
+#aida/data/Analysis/*
 *.class
 
 .DS_Store
