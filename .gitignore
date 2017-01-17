@@ -10,5 +10,7 @@ aida/data/imageFailedNeedHuman.txt
 
 aida/data/imagePassed.txt
 
+aida/feature-extract-and-classify/data/*.txt
+
 Master_Manifest.txt
 build_manifest_log.txt
