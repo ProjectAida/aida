@@ -1,7 +1,7 @@
 *.jpg
 *.json
 *.arff
-aida/feature-extract-and-classify/data/Analysis/*
+aida/data/Analysis/*
 *.class
 
 .DS_Store
