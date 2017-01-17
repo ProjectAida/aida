@@ -1,15 +1,1 @@
-*.jpg
-*.json
-*.arff
-*.class
-
 .DS_Store
-
-aida/feature-extract-and-classify/data/*.txt
-aida/feature-extract-and-classify/data/imageFailedNeedHuman.txt
-aida/feature-extract-and-classify/data/imagePassed.txt
-aida/aida/feature-extract-and-classify/data/Analysis/*.arff
-aida/aida/feature-extract-and-classify/data/Analysis/*.csv
-
-Master_Manifest.txt
-build_manifest_log.txt
