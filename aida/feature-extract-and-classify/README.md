@@ -21,26 +21,18 @@ REQUIREMENTS
 INSTALLATION
 ------------
 1. Move directory 'aida/' into desired location.
-2. Run the retrieval by running (without quotes):
 
-	'python Batch_Retrieval.py <flag> <begin year> <end year>'
- 	
-	use <flag> to specify which functions to run. 
-	flag = 1 for run build manifest, get images and convert to *.jpg
-	flag = 2 for get images and convert to *.jpg (use if manifest already exists)
-	flag = 3 for build manifest only 
-
-3. Select desired options in using command line arguments in the script files (*.sh)
+2. Select desired options in using command line arguments in the script files (*.sh)
 	Find the line containing :"java execute/RunProgram <flag1> <flag2> $i"
 	flag1 is used to indicate which version of blurring to use (357, or 5)
 	flag2 is used to indicate whether to use regular blurring or custom blurring
-4. To run entire program, run the script by running the command:
+3. To run entire program, run the script by running the command:
 
 	'./RunAll.sh'
 
    in a terminal (without quotes) while in the parent directory. 
 
-5. To run a different version for a more specific purpose run these scripts
+4. To run a different version for a more specific purpose run these scripts
 	
 	* './runImageProcess.sh'
 	* './RunPageSegementation.sh' -- Runs through the file hierarchy containing the jpg images and runs the page segmentation process on each image individually
