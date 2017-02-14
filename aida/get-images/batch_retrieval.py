@@ -69,7 +69,7 @@ def buildFullManifest():
                 if partialDataPath[1].endswith('.jp2') and partialDataPath[1].count('/') == 4:
                     fullDataPaths.append(j+partialDataPath[1]+'\n')
                     fullDataPaths.sort()
-            
+
             openf.writelines(fullDataPaths)
         except Exception as e:
             print "Encountered an error with batch " + j + " : "+ str(e) + "\n"
@@ -98,20 +98,20 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
         fullCount = 0
         for line in masterManifest:
             lineList = line.split('/')
-            
+
             #used in construction of the image's filename.
             #ensures consistent naming since each issue of a newspaper shares the same base name
             if lineList[9] == previousLine:
                 pageCount += 1
             else:
                 pageCount = 1
-            
+
             imageYear = int(lineList[9][:4])
             if imageYear >= startYear and imageYear <= endYear:
                 fullCount += 1
                 #Remove end line character
                 imageURL = line[:-1]
-                
+
                 #construct file and directory names for sorting purposes
                 batchName = lineList[5][6:]
                 snNumber = lineList[7]
@@ -125,7 +125,7 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
                 if not os.path.exists("data/FullPages/"+batchName+"/"+issueName):
                     os.makedirs("data/FullPages/"+batchName+"/"+issueName)
                 os.chdir("data/FullPages/"+batchName+"/"+issueName)
-                
+
                 Flag404 = 0
                 try:
                     #make a check to see if image is available/found
@@ -146,7 +146,7 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
                             #response = urllib2.urlopen(imageURL)
                             #with open(imageName, "w") as imageFile:
                             #    imageFile.write(response.read())
-                            
+
                             #call the os' download function
                             os.system('wget -q -O %s %s' %(imageName, imageURL))
                             IOFlag = 0
@@ -159,9 +159,9 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
                 sys.stdout.write("\rProcessed Image "+str(fullCount)+"/"+str(imageCount)+"           ")
                 sys.stdout.flush()
                 os.chdir("../../../../")
-                
-                        
-            
+
+
+
             previousLine = lineList[9]
     if len(Error404) > 0:
         print "This files returned a 404 error when trying to download the images."
@@ -196,7 +196,7 @@ def convertToJpg():
                     im = Image(str(k))
                     newName = k[:-3]+'jpg'
                     im.write(str(newName))
-                    
+
                     #Status update on how many images have been processed
                     sys.stdout.write("\rConverted Batch: "+str(currentBatch)+"/"+str(totalBatches)+" Issue: "+str(currentIssue)+"/"+str(totalIssues)+" Image: "+str(currentImage)+"/"+str(totalImages)+"           ")
                     sys.stdout.flush()
