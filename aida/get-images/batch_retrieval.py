@@ -109,8 +109,7 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
             imageYear = int(lineList[9][:4])
             if imageYear >= int(startYear) and imageYear <= int(endYear):
                 fullCount += 1
-                #Remove end line character
-                imageURL = line[:-1]
+                imageURL = line
 
                 #construct file and directory names for sorting purposes
                 batchName = lineList[5][6:]
