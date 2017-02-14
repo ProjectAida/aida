@@ -11,7 +11,7 @@ manifest_file = "Master_Manifest.txt"
 
 #This function creates a manifest containing the web urls of every jp2 image of a newspaper page.
 #It does this by first navigating to the html page that links to each of the batch folders, then scrubs
-#through the html source code to aquire the names of each batch folder. Once aquired the function naviagtes
+#through the html source code to acquire the names of each batch folder. Once acquired the function navigates
 #to each batch folder and loads up the manifest for that batch, retrieves the urls for the images from the manifest
 #and appends them to the full manifest file.
 def buildFullManifest():
@@ -79,7 +79,7 @@ def buildFullManifest():
 
 #This function, when given a begin year and an end year, will search through the full Manifest file
 #and download all images within a year range. For one year, the same year is used for both parameters.
-#The images are downloaded to the folowing directory structure: data/FullPages/BatchLevel/IssueLevel/PageLevel
+#The images are downloaded to the following directory structure: data/FullPages/BatchLevel/IssueLevel/PageLevel
 #This function also uses wget (or curl for macs) in order to download images, this is due to complications on the
 #Library of Congress's server and urllib being unable to handle requests from them.
 def getImages(startYear = 1836, endYear = datetime.now().year):
@@ -99,7 +99,7 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
         for line in masterManifest:
             lineList = line.split('/')
             
-            #used in contruction of the image's filename.
+            #used in construction of the image's filename.
             #ensures consistent naming since each issue of a newspaper shares the same base name
             if lineList[9] == previousLine:
                 pageCount += 1
@@ -109,7 +109,7 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
             imageYear = int(lineList[9][:4])
             if imageYear >= startYear and imageYear <= endYear:
                 fullCount += 1
-                #Remove endline character
+                #Remove end line character
                 imageURL = line[:-1]
                 
                 #construct file and directory names for sorting purposes
@@ -200,7 +200,7 @@ def convertToJpg():
                     #Status update on how many images have been processed
                     sys.stdout.write("\rConverted Batch: "+str(currentBatch)+"/"+str(totalBatches)+" Issue: "+str(currentIssue)+"/"+str(totalIssues)+" Image: "+str(currentImage)+"/"+str(totalImages)+"           ")
                     sys.stdout.flush()
-                    #remove old jp2 image to conserve space, also only remove if conversion was successfull
+                    #remove old jp2 image to conserve space, also only remove if conversion was successful
                     os.remove(k)
                 except:
                     problemImages.append(str(k))
