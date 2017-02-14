@@ -89,7 +89,7 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
         for line in masterManifest:
             lineList = line.split('/')
             imageYear = int(lineList[9][:4])
-            if imageYear >= startYear and imageYear <= endYear:
+            if imageYear >= int(startYear) and imageYear <= int(endYear):
                 imageCount += 1
 
     with open(manifest_file, "r") as masterManifest:
@@ -107,7 +107,7 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
                 pageCount = 1
 
             imageYear = int(lineList[9][:4])
-            if imageYear >= startYear and imageYear <= endYear:
+            if imageYear >= int(startYear) and imageYear <= int(endYear):
                 fullCount += 1
                 #Remove end line character
                 imageURL = line[:-1]
