@@ -9,11 +9,11 @@ import urllib2
 
 manifest_file = "Master_Manifest.txt"
 
-#This function creates a manifest containing the web urls of every jp2 image of a newspaper page.
+#This function creates a manifest containing the web urls of every jp2 newspaper page images from Chronicling America.
 #It does this by first navigating to the html page that links to each of the batch folders, then scrubs
-#through the html source code to acquire the names of each batch folder. Once acquired the function navigates
+#through the html source code to acquire the names of each batch folder. Once batch folder names are acquired, the function navigates
 #to each batch folder and loads up the manifest for that batch, retrieves the urls for the images from the manifest
-#and appends them to the full manifest file.
+#and appends the URLs to the full manifest file.
 def buildFullManifest():
     # remove existing manifest file in order to prevent appending to it
     if os.path.exists(manifest_file):
