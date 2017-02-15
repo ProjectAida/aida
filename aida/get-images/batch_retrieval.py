@@ -78,10 +78,10 @@ def buildFullManifest():
     log.close()
 
 #This function, when given a begin year and an end year, will search through the full Manifest file
-#and download all images within a year range. For one year, the same year is used for both parameters.
+#and download all images within a year range. For images from a single year, the same year is used for both parameters.
 #The images are downloaded to the following directory structure: data/FullPages/BatchLevel/IssueLevel/PageLevel
-#This function also uses wget (or curl for macs) in order to download images, this is due to complications on the
-#Library of Congress's server and urllib being unable to handle requests from them.
+#This function also uses wget in order to download images, this is due to complications we ran into
+#using urllib with the Library of Congress's server.
 def getImages(startYear = 1836, endYear = datetime.now().year):
     Error404 = []
     imageCount = 0
