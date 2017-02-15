@@ -111,7 +111,7 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
                 fullCount += 1
                 imageURL = line
 
-                #construct file and directory names for sorting purposes
+                #constructs file and directory names for sorting purposes
                 batchName = lineList[5][6:]
                 snNumber = lineList[7]
                 date = lineList[9][:4]+"-"+lineList[9][4:6]+"-"+lineList[9][6:8]
@@ -127,7 +127,7 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
 
                 Flag404 = 0
                 try:
-                    #make a check to see if image is available/found
+                    #makes a check to see if image is available/found
                     socket = urllib2.urlopen(imageURL)
                 except urllib2.HTTPError, err:
                     if err.code == 404:
