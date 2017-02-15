@@ -169,8 +169,8 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
         print "All files downloaded with no errors"
 
 #This function searches through the directory structure created in the getImages function
-#and converts all jp2 images to the jpg format. If image can't be converted the function adds
-#the filename to a list of broken images and is presented at the end of the process.
+#and converts all jp2 images to the jpg format. If an image can't be converted, the function adds
+#the filename to a list of broken images, and this list is presented at the end of the process.
 def convertToJpg():
     problemImages = []
     os.chdir("data/FullPages")
