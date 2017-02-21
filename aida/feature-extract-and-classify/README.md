@@ -20,18 +20,17 @@ INSTALLATION
 ------------
 1. Move directory 'aida/' into desired location.
 
-2. Select desired options using command line arguments in the script files (*.sh):  
-Find the line containing : `java execute/RunProgram <flag1> <flag2> $i`  
+2. Select desired options using command line arguments in the script files (.sh files):  
+Find the line containing: `java execute/RunProgram <flag1> <flag2> $i`  
 	* flag1 is used to indicate which version of blurring to use (357, or 5)
 	* flag2 is used to indicate whether to use regular blurring or custom blurring
 
-3. To run entire program, run the script by running the command:  
-`./RunAll.sh`  
-in a terminal while in the parent directory.
+3. To run entire program, run the script by running the command `./RunAll.sh` in a terminal while in the parent directory.
 
-4. To run a different version for a more specific purpose run these scripts
-	* `./runImageProcess.sh`
-	* `./RunPageSegementation.sh` -- Runs through the file hierarchy containing the jpg images and runs the page segmentation process on each image individually
+4. To run a subset of the full program for a single purpose, choose from these scripts  
+  * `./RunPageSegementation.sh` [Runs through the file hierarchy containing the jpg images and runs the page segmentation process on each image to create image snippets]
+  * `./runImageProcess.sh`
+
 
 Directories and Files
 -----------------
