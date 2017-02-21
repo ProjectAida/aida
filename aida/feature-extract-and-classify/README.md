@@ -1,18 +1,18 @@
-## CONTENTS ##
+## Contents ##
 * Introduction
 * Requirements
 * Installation
 * Directories and Files
 * Notes
 
-## INTRODUCTION ##
+## Introduction ##
 Creates image snippets from page images of historic newspaper pages, processes those snippets to prepare them for feature extraction, extracts feature values, and then determines if an image snippet contains poetic content using a Multilayer Perception Artificial Neural Network trained on feature values.
 
-## REQUIREMENTS ##
+## Requirements ##
 * Java Runtime 1.5 or higher
 * Unix based system architecture
 
-## INSTALLATION ##
+## Installation ##
 1. Move directory 'aida/' into desired location.
 
 2. Select desired options using command line arguments in the script files (.sh files):  
@@ -48,7 +48,7 @@ aida
 + runImageProcess.sh : image process only  
 + runSegmentation.sh : segmentation algorithm only  
 
-## NOTES ##
+## Notes ##
 * Snippets created from images in data/FullPages are placed in data/Output_Snippets/
 * A list of filepaths for these files is created and placed in SnippetPathList.txt
 * .arff outputs are stored in data/Analysis.
