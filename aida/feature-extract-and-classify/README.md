@@ -7,16 +7,13 @@
 
 
 ## INTRODUCTION ##
-
 Creates image snippets from page images of historic newspaper pages, processes those snippets to prepare them for feature extraction, extracts feature values, and then determines if an image snippet contains poetic content using a Multilayer Perception Artificial Neural Network trained on feature values.
 
 ## REQUIREMENTS ##
-
 * Java Runtime 1.5 or higher
 * Unix based system architecture
 
 ## INSTALLATION ##
-
 1. Move directory 'aida/' into desired location.
 
 2. Select desired options using command line arguments in the script files (.sh files):  
@@ -32,7 +29,6 @@ Find the line containing: `java execute/RunProgram <flag1> <flag2> $i`
 
 
 ## Directories and Files ##
-
 aida  
 + data  
     - Analysis : Folder containing .arff files  
@@ -51,8 +47,8 @@ aida
 + weka : Package containing classes resposible for weka ANN and results.  
     - weka_jar : directory contains the .jar files for weka.  
 + RunAll.sh : Runs all processes  
-+ runImageProcess.sh : Runs Maanas' Image Process only.  
-+ runSegmentation.sh : Runs Spencer's Segmentation algorithm only.  
++ runImageProcess.sh : image process only  
++ runSegmentation.sh : segmentation algorithm only  
 
 ## NOTES ##
 * Snippets created from images in data/FullPages are placed in data/Output_Snippets/
