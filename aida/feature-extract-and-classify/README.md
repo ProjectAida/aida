@@ -1,42 +1,32 @@
-CONTENTS
-----------------------
+## Contents ##
 * Introduction
 * Requirements
 * Installation
 * Directories and Files
 * Notes
 
+## Introduction ##
+Creates image snippets from page images of historic newspaper pages, processes those snippets to prepare them for feature extraction, extracts feature values, and then determines if an image snippet contains poetic content using a Multilayer Perception Artificial Neural Network trained on feature values.
 
-INTRODUCTION
-------------
-AIDA Project procedurally analyzes image archives of newspaper and 
-determines if that particular image contains a poem using a Multilayer Perception
-Artificial Neural Network
-
-REQUIREMENTS
-------------
+## Requirements ##
 * Java Runtime 1.5 or higher
 * Unix based system architecture
 
-INSTALLATION
-------------
+## Installation ##
 1. Move directory 'aida/' into desired location.
 
-2. Select desired options using command line arguments in the script files (*.sh):  
-Find the line containing : `java execute/RunProgram <flag1> <flag2> $i`  
+2. Select desired options using command line arguments in the script files (.sh files):  
+Find the line containing: `java execute/RunProgram <flag1> <flag2> $i`  
 	* flag1 is used to indicate which version of blurring to use (357, or 5)
-	* flag2 is used to indicate whether to use regular blurring or custom blurring
+	* flag2 is used to indicate whether to use regular blurring or the consolidation technique
 
-3. To run entire program, run the script by running the command:  
-`./RunAll.sh`  
-in a terminal while in the parent directory. 
+3. To run entire program, run the script by running the command `./RunAll.sh` in a terminal while in the parent directory.
 
-4. To run a different version for a more specific purpose run these scripts
-	* `./runImageProcess.sh`
-	* `./RunPageSegementation.sh` -- Runs through the file hierarchy containing the jpg images and runs the page segmentation process on each image individually
+4. To run a subset of the full program for a single purpose, choose from these scripts  
+  * `./RunPageSegementation.sh` [Runs through the file hierarchy containing the jpg images and runs the page segmentation process on each image to create image snippets]
+  * `./runImageProcess.sh` [Runs blurring and/or consolidation, feature extraction, and classification processes]
 
-Directories and Files
------------------
+## Directories and Files ##
 aida  
 + data  
     - Analysis : Folder containing .arff files  
@@ -52,15 +42,14 @@ aida
     - global : Package contains Constants class that holds the filepaths for various locations.  
     - models : Package contains Model classes that represents various types of images.  
     - processHelpers : Package contains classes responsible for determining thresholds.  
-+ weka : Package containing classes resposible for weka ANN and results.  
++ weka : Package containing classes responsible for weka ANN and results.  
     - weka_jar : directory contains the .jar files for weka.  
 + RunAll.sh : Runs all processes  
-+ runImageProcess.sh : Runs Maanas' Image Process only.  
-+ runSegmentation.sh : Runs Spencer's Segmentation algorithm only.  
++ runImageProcess.sh : image process only  
++ runSegmentation.sh : segmentation algorithm only  
 
-NOTES
------
-* Snippets for images in data/FullImages are placed in data/Output_Snippets/
+## Notes ##
+* Snippets created from images in data/FullPages are placed in data/Output_Snippets/
 * A list of filepaths for these files is created and placed in SnippetPathList.txt
 * .arff outputs are stored in data/Analysis.
 * Standard out is used for final results.
