@@ -18,7 +18,7 @@ Creates image snippets from page images of historic newspaper pages, processes t
 2. Select desired options using command line arguments in the script files (.sh files):  
 Find the line containing: `java execute/RunProgram <flag1> <flag2> $i`  
 	* flag1 is used to indicate which version of blurring to use (357, or 5)
-	* flag2 is used to indicate whether to use regular blurring or custom blurring
+	* flag2 is used to indicate whether to use regular blurring or the consolidation technique
 
 3. To run entire program, run the script by running the command `./RunAll.sh` in a terminal while in the parent directory.
 
