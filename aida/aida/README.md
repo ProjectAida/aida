@@ -12,19 +12,24 @@ Creates image snippets from page images of historic newspaper pages, processes t
 * Java Runtime 1.5 or higher
 * Unix based system architecture
 
-## Installation ##
+## Running ##
 1. Move directory 'aida/' into desired location.
 
-2. Select desired options using command line arguments in the script files (.sh files):  
-Find the line containing: `java execute/RunProgram <flag1> <flag2> $i`  
-	* flag1 is used to indicate which version of blurring to use (357, or 5)
-	* flag2 is used to indicate whether to use regular blurring or the consolidation technique
+2. Determine which script you want to run. There are three possible scripts to run:
+  * RunAll.sh: segments full page images of historic newspapers, processes snippets to prepare them for feature extraction, extracts feature values, and classifies image snippets as True (contains poetic content) or False (does not contain poetic content)
+	* RunPageSegementation.sh: segments full page images of historic newspapers and saves snippets for later processing
+	* runImageProcess.sh: processes existing snippets to prepare them for feature extraction, extracts feature values, and classifies image snippets as True (contains poetic content) or False (does not contain poetic content)
 
-3. To run entire program, run the script by running the command `./RunAll.sh` in a terminal while in the parent directory.
+3. Specify desired options, if you will be running either **RunAll.sh** or **runImageProcess.sh**:   
+In the script you want to run (either **RunAll.sh** or **runImageProcess.sh**), find the line containing `java execute/RunProgram <flag1> <flag2> $i`  
+	* update flag1 to one of two values, '357' or '5', to specify which blurring to use
+	* update flag2 to one of two values, 'C' or 'R', to specify whether to use regular blurring or the consolidation technique
+**Example**: `java execute/RunProgram 5 C $i`
 
-4. To run a subset of the full program for a single purpose, choose from these scripts  
-  * `./RunPageSegementation.sh` [Runs through the file hierarchy containing the jpg images and runs the page segmentation process on each image to create image snippets]
-  * `./runImageProcess.sh` [Runs blurring and/or consolidation, feature extraction, and classification processes]
+4. Run desired script:
+  * To run entire program, run the script with the command `./RunAll.sh` in a terminal while in the parent directory.
+	* To run only the subset of the program that segments full page images of historic newspapers and saves snippets for later processing, run the script with the command `./RunPageSegementation.sh` in a terminal while in the parent directory.
+  * To run only the subset of the program that processes existing snippets by performing blurring and/or consolidation, feature extraction, and classification processes, run the script with the command `./runImageProcess.sh` in a terminal while in the parent directory.
 
 ## Directories and Files ##
 aida  
