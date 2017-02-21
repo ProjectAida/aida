@@ -24,7 +24,7 @@ Find the line containing: `java execute/RunProgram <flag1> <flag2> $i`
 
 4. To run a subset of the full program for a single purpose, choose from these scripts  
   * `./RunPageSegementation.sh` [Runs through the file hierarchy containing the jpg images and runs the page segmentation process on each image to create image snippets]
-  * `./runImageProcess.sh`
+  * `./runImageProcess.sh` [Runs blurring and/or consolidation, feature extraction, and classification processes]
 
 ## Directories and Files ##
 aida  
