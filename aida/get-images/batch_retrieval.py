@@ -9,11 +9,11 @@ import urllib2
 
 manifest_file = "Master_Manifest.txt"
 
-#This function creates a manifest containing the web urls of every jp2 image of a newspaper page.
+#This function creates a manifest containing the web urls of every jp2 newspaper page images from Chronicling America.
 #It does this by first navigating to the html page that links to each of the batch folders, then scrubs
-#through the html source code to acquire the names of each batch folder. Once acquired the function navigates
+#through the html source code to acquire the names of each batch folder. Once batch folder names are acquired, the function navigates
 #to each batch folder and loads up the manifest for that batch, retrieves the urls for the images from the manifest
-#and appends them to the full manifest file.
+#and appends the URLs to the full manifest file.
 def buildFullManifest():
     # remove existing manifest file in order to prevent appending to it
     if os.path.exists(manifest_file):
@@ -78,10 +78,10 @@ def buildFullManifest():
     log.close()
 
 #This function, when given a begin year and an end year, will search through the full Manifest file
-#and download all images within a year range. For one year, the same year is used for both parameters.
+#and download all images within a year range. For images from a single year, the same year is used for both parameters.
 #The images are downloaded to the following directory structure: data/FullPages/BatchLevel/IssueLevel/PageLevel
-#This function also uses wget (or curl for macs) in order to download images, this is due to complications on the
-#Library of Congress's server and urllib being unable to handle requests from them.
+#This function also uses wget in order to download images, this is due to complications we ran into
+#using urllib with the Library of Congress's server.
 def getImages(startYear = 1836, endYear = datetime.now().year):
     Error404 = []
     imageCount = 0
@@ -111,7 +111,7 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
                 fullCount += 1
                 imageURL = line
 
-                #construct file and directory names for sorting purposes
+                #constructs file and directory names for sorting purposes
                 batchName = lineList[5][6:]
                 snNumber = lineList[7]
                 date = lineList[9][:4]+"-"+lineList[9][4:6]+"-"+lineList[9][6:8]
@@ -127,7 +127,7 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
 
                 Flag404 = 0
                 try:
-                    #make a check to see if image is available/found
+                    #makes a check to see if image is available/found
                     socket = urllib2.urlopen(imageURL)
                 except urllib2.HTTPError, err:
                     if err.code == 404:
@@ -169,8 +169,8 @@ def getImages(startYear = 1836, endYear = datetime.now().year):
         print "All files downloaded with no errors"
 
 #This function searches through the directory structure created in the getImages function
-#and converts all jp2 images to the jpg format. If image can't be converted the function adds
-#the filename to a list of broken images and is presented at the end of the process.
+#and converts all jp2 images to the jpg format. If an image can't be converted, the function adds
+#the filename to a list of broken images, and this list is presented at the end of the process.
 def convertToJpg():
     problemImages = []
     os.chdir("data/FullPages")
