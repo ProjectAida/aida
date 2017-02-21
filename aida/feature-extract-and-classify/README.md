@@ -9,9 +9,7 @@ CONTENTS
 
 INTRODUCTION
 ------------
-AIDA Project procedurally analyzes image archives of newspaper and 
-determines if that particular image contains a poem using a Multilayer Perception
-Artificial Neural Network
+Creates image snippets from page images of historic newspaper pages, processes those snippets to prepare them for feature extraction, extracts feature values, and then determines if an image snippet contains poetic content using a Multilayer Perception Artificial Neural Network trained on feature values.
 
 REQUIREMENTS
 ------------
@@ -29,7 +27,7 @@ Find the line containing : `java execute/RunProgram <flag1> <flag2> $i`
 
 3. To run entire program, run the script by running the command:  
 `./RunAll.sh`  
-in a terminal while in the parent directory. 
+in a terminal while in the parent directory.
 
 4. To run a different version for a more specific purpose run these scripts
 	* `./runImageProcess.sh`
