@@ -42,7 +42,7 @@ aida
     - global : Package contains Constants class that holds the filepaths for various locations.  
     - models : Package contains Model classes that represents various types of images.  
     - processHelpers : Package contains classes responsible for determining thresholds.  
-+ weka : Package containing classes resposible for weka ANN and results.  
++ weka : Package containing classes responsible for weka ANN and results.  
     - weka_jar : directory contains the .jar files for weka.  
 + RunAll.sh : Runs all processes  
 + runImageProcess.sh : image process only  
