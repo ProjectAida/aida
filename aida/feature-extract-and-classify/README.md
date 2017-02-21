@@ -5,7 +5,6 @@
 * Directories and Files
 * Notes
 
-
 ## INTRODUCTION ##
 Creates image snippets from page images of historic newspaper pages, processes those snippets to prepare them for feature extraction, extracts feature values, and then determines if an image snippet contains poetic content using a Multilayer Perception Artificial Neural Network trained on feature values.
 
@@ -26,7 +25,6 @@ Find the line containing: `java execute/RunProgram <flag1> <flag2> $i`
 4. To run a subset of the full program for a single purpose, choose from these scripts  
   * `./RunPageSegementation.sh` [Runs through the file hierarchy containing the jpg images and runs the page segmentation process on each image to create image snippets]
   * `./runImageProcess.sh`
-
 
 ## Directories and Files ##
 aida  
