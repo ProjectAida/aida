@@ -41,7 +41,7 @@ Move directory 'aida/' into desired location.
 9. Copy the data directory to a new directory with a different name, to preserve all of the input and output data (e.g., cp -r data data-code-run-yyy-mm-dd-hhmm). Create a readme file that explains any necessary variables.
 
 ### Testing ###
-**Testing works with full newspaper page images, not snippets.**  
+ 
 1. Make sure there is a TrainList.arff file in data/Analysis. If there is already a TestList.arff file, remove it, rename it, or move it to a sub-directory or external directory.  
 2. In the data directory, clear out the following files (leave the files, but they should have no content):
 FailedList.txt
