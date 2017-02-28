@@ -53,7 +53,7 @@ Move directory 'aida/' into desired location.
   * snippetPathList.txt
   * successfulSegments.txt
   * TruePages.txt
-  * TrueSnippets.txt
+  * TrueSnippets.txt  
 3. Make sure that the following directories are empty, and if they are not, then remove all contents (backing up elsewhere, if so desired):
   * FullPages
   * Output_Binary
