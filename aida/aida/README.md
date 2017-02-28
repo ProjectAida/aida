@@ -18,7 +18,7 @@ Move directory 'aida/' into desired location.
 ### Training ###
 1. If necessary (no image snippets yet exist or more are needed), create snippets from full newspaper pages that are both TRUE (include poetic content) and FALSE (no poetic content). This can be done manually or by running the RunPageSegmentation program described below. If the snippets are created automatically, they will still need to be manually inspected and labeled as true or false.
 2. Make sure there are no files in data/Analysis named either TrainList.arff or TestList.arff. If there are files in data/Analysis with these names, remove them, rename them, or move them into a sub-directory or external directory.
-3. In the data directory, clear out the follow files (leave the files, but they should have no content):
+3. In the data directory, clear out the following files (leave the files, but they should have no content):
   * FailedList.txt
   * FalsePages.txt
   * FalseSnippets.txt
@@ -43,7 +43,7 @@ Move directory 'aida/' into desired location.
 ### Testing ###
 **Testing works with full newspaper page images, not snippets.**  
 1. Make sure there is a TrainList.arff file in data/Analysis. If there is already a TestList.arff file, remove it, rename it, or move it to a sub-directory or external directory.  
-2. In the data directory, clear out the following files (leave the files, but they should have no content):  
+2. In the data directory, clear out the following files (leave the files, but they should have no content):
   * FailedList.txt
   * FalsePages.txt
   * FalseSnippets.txt
@@ -54,7 +54,7 @@ Move directory 'aida/' into desired location.
   * successfulSegments.txt
   * TruePages.txt
   * TrueSnippets.txt
-3. Make sure that the following directories are empty, and, if they are nor, then remove all contents (backing up elsewhere if so desired):
+3. Make sure that the following directories are empty, and if they are not, then remove all contents (backing up elsewhere, if so desired):
   * FullPages
   * Output_Binary
   * Output_Blurred
