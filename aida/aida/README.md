@@ -19,21 +19,21 @@ Move directory 'aida/' into desired location.
 1. If necessary (no image snippets yet exist or more are needed), create snippets from full newspaper pages that are both TRUE (include poetic content) and FALSE (no poetic content). This can be done manually or by running the RunPageSegmentation program described below. If the snippets are created automatically, they will still need to be manually inspected and labeled as true or false.
 2. Make sure there are no files in data/Analysis named either TrainList.arff or TestList.arff. If there are files in data/Analysis with these names, remove them, rename them, or move them into a sub-directory or external directory.
 3. In the data directory, clear out the following files (leave the files, but they should have no content):
-  * FailedList.txt
-  * FalsePages.txt
-  * FalseSnippets.txt
-  * imageFailedNeedHuman.txt
-  * imagePassed.txt
-  * SnippetNameList.txt
-  * snippetPathList.txt
-  * successfulSegments.txt
-  * TruePages.txt
-  * TrueSnippets.txt
+FailedList.txt
+FalsePages.txt
+FalseSnippets.txt
+imageFailedNeedHuman.txt
+imagePassed.txt
+SnippetNameList.txt
+snippetPathList.txt
+successfulSegments.txt
+TruePages.txt
+TrueSnippets.txt
 4. Make sure that the following directories are empty, and if they are not, then remove all contents (backing up elsewhere, if so desired):
-  * Output_Binary
-  * Output_Blurred
-  * Output_Custom
-  * Output_Snippets
+Output_Binary
+Output_Blurred
+Output_Custom
+ Output_Snippets
 5. Upload the training snippets to Output_Snippets
 6. Copy/paste all of the image filenames of the training snippets, with one filename/line into labelledImages.txt. Append the label \_true to all true image filenames and \_false to all false image filenames before the file extension. You may prefer to append these labels to the files themselves, so that you can simply output a directory listing to the file, with the labels already in place. One way or another, labelledImages.txt needs to have every filename from Output_Snippets with either a \_true or \_false label appended prior to the file extension.
 7. Open **src/execute/RunProgram.java**, and in line 50, make sure **int whatSet** is set to **"train."** The line should read: `int whatSet = train;`
