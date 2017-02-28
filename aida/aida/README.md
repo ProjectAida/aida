@@ -38,7 +38,7 @@ aida
     - Output_Snippets : Folder contains snippets generated from segmentation algorithm  
     - Output_Custom : Folder contains custom blurred images  
     - Output_Binary : Folder contains binary images  
-    - FullPages : Folder where Full newspaper images downloaded from CA  
+    - FullPages : Folder for full newspaper page images  
     - TrainImages : Images used for Training set.  
 + src : Folder containing all source code.  
     - blurring : Package containing classes responsible for different types of blurring  
