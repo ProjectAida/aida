@@ -13,8 +13,11 @@ Creates image snippets from page images of historic newspaper pages, processes t
 * Unix based system architecture
 
 ## Running ##
-1. Move directory 'aida/' into desired location.
+Move directory 'aida/' into desired location.
 
+### Training ###
+
+### Testing ###
 2. Determine which script you want to run. There are three possible scripts to run:
   * RunAll.sh: segments full page images of historic newspapers, processes snippets to prepare them for feature extraction, extracts feature values, and classifies image snippets as True (contains poetic content) or False (does not contain poetic content)
   * RunPageSegementation.sh: segments full page images of historic newspapers and saves snippets for later processing
