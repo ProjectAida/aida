@@ -37,7 +37,8 @@ Move directory 'aida/' into desired location.
 5. Upload the training snippets to Output_Snippets
 6. Copy/paste all of the image filenames of the training snippets, with one filename/line into labelledImages.txt. Append the label \_true to all true image filenames and \_false to all false image filenames before the file extension. You may prefer to append these labels to the files themselves, so that you can simply output a directory listing to the file, with the labels already in place. One way or another, labelledImages.txt needs to have every filename from Output_Snippets with either a \_true or \_false label appended prior to the file extension.
 7. Open **src/execute/RunProgram.java**, and in line 50, make sure **int whatSet** is set to **"train."** The line should read: `int whatSet = train;`
-8. Copy the data directory to a new directory with a different name, to preserve all of the input and output data (e.g., cp -r data data-code-run-2017-02-28). Create a readme file that explains any necessary variables.
+8. At the aida root directory, execute the runImageProcess.sh file: `./runImageProcess.sh`
+9. Copy the data directory to a new directory with a different name, to preserve all of the input and output data (e.g., cp -r data data-code-run-2017-02-28). Create a readme file that explains any necessary variables.
 
 ### Testing ###
 2. Determine which script you want to run. There are three possible scripts to run:
