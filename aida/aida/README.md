@@ -43,7 +43,7 @@ Move directory 'aida/' into desired location.
 ### Testing ###
 **Testing works with full newspaper page images, not snippets.**  
 1. Make sure there is a TrainList.arff file in data/Analysis. If there is already a TestList.arff file, remove it, rename it, or move it to a sub-directory or external directory.
-2. In the data directory, clear out the following files (leave the files, but they should have no content):
+2. In the data directory, clear out the following files (leave the files, but they should have no content):  
   * FailedList.txt
   * FalsePages.txt
   * FalseSnippets.txt
@@ -54,6 +54,7 @@ Move directory 'aida/' into desired location.
   * successfulSegments.txt
   * TruePages.txt
   * TrueSnippets.txt
+
 3. Make sure that the following directories are empty, and, if they are nor, then remove all contents (backing up elsewhere if so desired):
   * FullPages
   * Output_Binary
