@@ -59,7 +59,7 @@ FullPages
 Output_Binary
 Output_Blurred
 Output_Custom
-Output_Snippets
+Output_Snippets  
 4. Upload the newspaper page images to the FullPages directory. Images should be located in at least two levels of sub-directories below (e.g., 'paper' and 'issue').
 5. Copy/paste all of the image filenames of the training snippets, with one filename/line into labelledImages.txt. Append the label \_true to all true image filenames and \_false to all false image filenames before the file extension. You may prefer to append these labels to the files themselves, so that you can simply output a directory listing to the file, with the labels already in place. One way or another, labelledImages.txt needs to have every filename from Output_Snippets with either a \_true or \_false label appended prior to the file extension.
 6. Open **src/execute/RunProgram.java**, and in line 50, make sure **int whatSet** is set to **"test."** The line should read: `int whatSet = test;`
