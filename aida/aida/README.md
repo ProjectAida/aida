@@ -41,7 +41,7 @@ Move directory 'aida/' into desired location.
 9. Copy the data directory to a new directory with a different name, to preserve all of the input and output data (e.g., cp -r data data-code-run-yyy-mm-dd-hhmm). Create a readme file that explains any necessary variables.
 
 ### Testing ###
- 
+
 1. Make sure there is a TrainList.arff file in data/Analysis. If there is already a TestList.arff file, remove it, rename it, or move it to a sub-directory or external directory.  
 2. In the data directory, clear out the following files (leave the files, but they should have no content):
   * FailedList.txt
@@ -60,7 +60,7 @@ Move directory 'aida/' into desired location.
   * Output_Blurred
   * Output_Custom
   * Output_Snippets  
-4. Upload the newspaper page images to the FullPages directory. Images should be located in at least two levels of sub-directories below (e.g., 'paper' and 'issue').  
+4. Upload the newspaper page images to the FullPages directory. Images should be located in at least two levels of sub-directories below (e.g., 'paper' and 'issue').  Testing works with full newspaper page images, not snippets.
 5. Copy/paste all of the image filenames of the training snippets, with one filename/line into labelledImages.txt. Append the label \_true to all true image filenames and \_false to all false image filenames before the file extension. You may prefer to append these labels to the files themselves, so that you can simply output a directory listing to the file, with the labels already in place. One way or another, labelledImages.txt needs to have every filename from Output_Snippets with either a \_true or \_false label appended prior to the file extension.  
 6. Open **src/execute/RunProgram.java**, and in line 50, make sure **int whatSet** is set to **"test."** The line should read: `int whatSet = test;`  
 7. Determine which script you want to run. There are three possible scripts to run:
