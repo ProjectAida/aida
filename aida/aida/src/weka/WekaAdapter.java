@@ -268,8 +268,8 @@ public class WekaAdapter implements Prediction{
 
 		// FinalResultGenerator is imported to generate results for the parent newspapers and its statistics.
 
-		FinalResultGenerator rg = new FinalResultGenerator();
-		rg.generateResults();
+		// FinalResultGenerator rg = new FinalResultGenerator();
+		// rg.generateResults();
 
 
 
