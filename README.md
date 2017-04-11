@@ -18,7 +18,7 @@ Move directory 'aida/' into desired location.
 ### Training ###
 1. If necessary (no image snippets yet exist or more are needed), create snippets from full newspaper pages that are both TRUE (include poetic content) and FALSE (no poetic content). This can be done manually or by running the RunPageSegmentation program described below. If the snippets are created automatically, they will still need to be manually inspected and labeled as true or false.
 2. Make sure there are no files in data/Analysis named either TrainList.arff or TestList.arff. If there are files in data/Analysis with these names, remove them, rename them, or move them into a sub-directory or external directory.
-3. In the data directory, clear out the following files if they exist (leave the files, but they should have no content):
+3. In the data directory, clear out the following files (leave the files, but they should have no content):
   * FailedList.txt
   * FalsePages.txt
   * FalseSnippets.txt
@@ -29,7 +29,7 @@ Move directory 'aida/' into desired location.
   * successfulSegments.txt
   * TruePages.txt
   * TrueSnippets.txt
-4. Make sure that the following directories are empty (if they exist), and if they are not, then remove all contents (backing up elsewhere, if so desired):
+4. Make sure that the following directories are empty, and if they are not, then remove all contents (backing up elsewhere, if so desired):
   * Output_Binary
   * Output_Blurred
   * Output_Custom
@@ -43,7 +43,7 @@ Move directory 'aida/' into desired location.
 ### Testing ###
 
 1. Make sure there is a TrainList.arff file in data/Analysis. If there is already a TestList.arff file, remove it, rename it, or move it to a sub-directory or external directory.  
-2. In the data directory, clear out the following files, if they exist (leave the files, but they should have no content):
+2. In the data directory, clear out the following files (leave the files, but they should have no content):
   * FailedList.txt
   * FalsePages.txt
   * FalseSnippets.txt
@@ -54,28 +54,29 @@ Move directory 'aida/' into desired location.
   * successfulSegments.txt
   * TruePages.txt
   * TrueSnippets.txt  
-3. Make sure that the following directories are empty (if they exist), and if they are not, then remove all contents (backing up elsewhere, if so desired):
+3. Make sure that the following directories are empty, and if they are not, then remove all contents (backing up elsewhere, if so desired):
   * FullPages
   * Output_Binary
   * Output_Blurred
   * Output_Custom
   * Output_Snippets  
-4. Upload the newspaper page images to the FullPages directory. Images should be located in at least two levels of sub-directories below (e.g., 'paper' and 'issue').  Testing works with full newspaper page images, not snippets. 
-5. Open **src/execute/RunProgram.java**, and in line 50, make sure **int whatSet** is set to **"test."** The line should read: `int whatSet = test;`  
-6. Determine which script you want to run. There are three possible scripts to run:
+4. Upload the newspaper page images to the FullPages directory. Images should be located in at least two levels of sub-directories below (e.g., 'paper' and 'issue').  Testing works with full newspaper page images, not snippets.
+5. Copy/paste all of the image filenames of the training snippets, with one filename/line into labelledImages.txt. Append the label \_true to all true image filenames and \_false to all false image filenames before the file extension. You may prefer to append these labels to the files themselves, so that you can simply output a directory listing to the file, with the labels already in place. One way or another, labelledImages.txt needs to have every filename from Output_Snippets with either a \_true or \_false label appended prior to the file extension.  
+6. Open **src/execute/RunProgram.java**, and in line 50, make sure **int whatSet** is set to **"test."** The line should read: `int whatSet = test;`  
+7. Determine which script you want to run. There are three possible scripts to run:
   * RunAll.sh: segments full page images of historic newspapers, processes snippets to prepare them for feature extraction, extracts feature values, and classifies image snippets as True (contains poetic content) or False (does not contain poetic content)
   * RunPageSegementation.sh: segments full page images of historic newspapers and saves snippets for later processing
   * runImageProcess.sh: processes existing snippets to prepare them for feature extraction, extracts feature values, and classifies image snippets as True (contains poetic content) or False (does not contain poetic content)  
-7. Specify desired options, if you will be running either **RunAll.sh** or **runImageProcess.sh**:   
+8. Specify desired options, if you will be running either **RunAll.sh** or **runImageProcess.sh**:   
 In the script you want to run (either **RunAll.sh** or **runImageProcess.sh**), find the line containing `java execute/RunProgram <flag1> <flag2> $i`  
   * update flag1 to one of two values, '357' or '5', to specify which blurring to use
   * update flag2 to one of two values, 'C' or 'R', to specify whether to use regular blurring or the consolidation technique
 **Example**: `java execute/RunProgram 5 C $i`
-8. Run desired script:
+9. Run desired script:
   * To run entire program, run the script with the command `./RunAll.sh` in a terminal while in the parent directory.
   * To run only the subset of the program that segments full page images of historic newspapers and saves snippets for later processing, run the script with the command `./RunPageSegementation.sh` in a terminal while in the parent directory.
   * To run only the subset of the program that processes existing snippets by performing blurring and/or consolidation, feature extraction, and classification processes, run the script with the command `./runImageProcess.sh` in a terminal while in the parent directory.
-9. Copy the data directory to a new directory with a different name, to preserve all of the input and output data (e.g., cp -r data data-code-run-yyy-mm-dd-hhmm). Create a readme file that explains any necessary variables.
+10. Copy the data directory to a new directory with a different name, to preserve all of the input and output data (e.g., cp -r data data-code-run-yyy-mm-dd-hhmm). Create a readme file that explains any necessary variables.
 
 ## Directories and Files ##
 aida  

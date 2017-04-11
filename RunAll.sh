@@ -33,3 +33,5 @@ for i in ${myArray[@]} ;
 		java execute/RunProgram 5 C $i
 		a=$(expr $a + 1)
 	done
+
+./runWeka.sh
