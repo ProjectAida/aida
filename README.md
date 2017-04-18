@@ -78,23 +78,23 @@ In the script you want to run (either **RunAll.sh** or **runImageProcess.sh**), 
 ## Directories and Files ##
 aida  
 + data  
-    - Analysis : Folder containing .arff files  
-    - Output_Snippets : Folder contains snippets generated from segmentation algorithm  
-    - Output_Custom : Folder contains custom blurred images  
-    - Output_Binary : Folder contains binary images  
-    - FullPages : Folder for full newspaper page images  
+    - Analysis: Folder containing .arff files  
+    - Output_Snippets: Folder contains snippets generated from segmentation algorithm  
+    - Output_Custom: Folder contains custom blurred images  
+    - Output_Binary: Folder contains binary images  
+    - FullPages: Folder for full newspaper page images  
 + src : Folder containing all source code.  
-    - blurring : Package containing classes responsible for different types of blurring  
-    - execute : Package containing classes responsible execution of various processes.  
+    - blurring: Package containing classes responsible for different types of blurring  
+    - execute: Package containing classes responsible execution of various processes.  
     - featureExtraction: Package containing classes responsible for analyzing features.  
-    - global : Package contains Constants class that holds the filepaths for various locations.  
-    - models : Package contains Model classes that represents various types of images.  
+    - global: Package contains Constants class that holds the filepaths for various locations.  
+    - models: Package contains Model classes that represents various types of images.  
     - processHelpers : Package contains classes responsible for determining thresholds.  
-+ weka : Package containing classes responsible for weka ANN and results.  
-    - weka_jar : directory contains the .jar files for weka.  
-+ RunAll.sh : Runs all processes  
-+ runImageProcess.sh : image process only  
-+ runSegmentation.sh : segmentation algorithm only  
++ weka: Package containing classes responsible for weka ANN and results.  
+    - weka_jar: directory contains the .jar files for weka.  
++ RunAll.sh: Runs all processes  
++ runImageProcess.sh: image process only  
++ runSegmentation.sh: segmentation algorithm only  
 
 ### Output Files ###
 All output files created by the program are created in the data directory:
