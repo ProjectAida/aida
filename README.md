@@ -98,10 +98,16 @@ aida
 + runSegmentation.sh : segmentation algorithm only  
 
 ### Output Files ###
-* Snippets created from images in data/FullPages are placed in data/Output_Snippets/
+All output files created by the program are created in the data directory:
+* Snippets created from images in FullPages/ are placed in Output_Snippets/ Binarized and consolidated versions of the snippets are placed in Output_Binary/ and Output_Custom/
+* File names of pages that pass the segmentation process are written to imagePassed.txt
+* File names of pages that fail the segmentation process are written to imageFailedNeedHuman.txt
 * A list of snippet names is created and placed in SnippetNameList.txt
 * A list of filepaths for these files is created and placed in snippetPathList.txt
-* .arff outputs are stored in data/Analysis.
+* During testing, the file names of snippets classified as true are written to TrueSnippets.txt
+* During testing, the file names of snippets classified as false are written to FalseSnippets.txt
+* During testing, the snippet classifications recorded in TrueSnippets.txt and FalseSnippets.txt are used to create page-level classifications. The file names of pages that contain poetry, based on the classification of snippets, are written to TruePages.txt. The file names of pages that do not contain poetry, based on the classification of snippets, are written to FalsePages.txt.
+* .arff outputs are stored in the Analysis sub-directory of data/.
 
 ## Notes ##
 * If using IDE, run the command line script first before running the file in
