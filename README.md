@@ -83,7 +83,6 @@ aida
     - Output_Custom : Folder contains custom blurred images  
     - Output_Binary : Folder contains binary images  
     - FullPages : Folder for full newspaper page images  
-    - TrainImages : Images used for Training set.  
 + src : Folder containing all source code.  
     - blurring : Package containing classes responsible for different types of blurring  
     - execute : Package containing classes responsible execution of various processes.  
