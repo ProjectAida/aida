@@ -101,6 +101,5 @@ aida
 * Snippets created from images in data/FullPages are placed in data/Output_Snippets/
 * A list of filepaths for these files is created and placed in SnippetPathList.txt
 * .arff outputs are stored in data/Analysis.
-* Standard out is used for final results.
 * If using IDE, run the command line script first before running the file in
   the IDE.
