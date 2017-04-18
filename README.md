@@ -97,9 +97,12 @@ aida
 + runImageProcess.sh : image process only  
 + runSegmentation.sh : segmentation algorithm only  
 
-## Notes ##
+### Output Files ###
 * Snippets created from images in data/FullPages are placed in data/Output_Snippets/
-* A list of filepaths for these files is created and placed in SnippetPathList.txt
+* A list of snippet names is created and placed in SnippetNameList.txt
+* A list of filepaths for these files is created and placed in snippetPathList.txt
 * .arff outputs are stored in data/Analysis.
+
+## Notes ##
 * If using IDE, run the command line script first before running the file in
   the IDE.
