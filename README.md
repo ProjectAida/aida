@@ -31,7 +31,6 @@ Move directory 'aida/' into desired location.
   * TrueSnippets.txt
 4. Make sure that the following directories are empty, and if they are not, then remove all contents (backing up elsewhere, if so desired):
   * Output_Binary
-  * Output_Blurred
   * Output_Custom
   * Output_Snippets
 5. Upload the training snippets to Output_Snippets
@@ -57,7 +56,6 @@ Move directory 'aida/' into desired location.
 3. Make sure that the following directories are empty, and if they are not, then remove all contents (backing up elsewhere, if so desired):
   * FullPages
   * Output_Binary
-  * Output_Blurred
   * Output_Custom
   * Output_Snippets  
 4. Upload the newspaper page images to the FullPages directory. Images should be located in at least two levels of sub-directories below (e.g., 'paper' and 'issue').  Testing works with full newspaper page images, not snippets.
