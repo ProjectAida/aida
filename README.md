@@ -24,6 +24,8 @@ Move directory 'aida/' into desired location.
   * FalseSnippets.txt
   * imageFailedNeedHuman.txt
   * imagePassed.txt
+  * SnippetNameList.txt
+  * snippetPathList.txt
   * successfulSegments.txt
   * TruePages.txt
   * TrueSnippets.txt
@@ -47,6 +49,8 @@ Move directory 'aida/' into desired location.
   * FalseSnippets.txt
   * imageFailedNeedHuman.txt
   * imagePassed.txt
+  * SnippetNameList.txt
+  * snippetPathList.txt
   * successfulSegments.txt
   * TruePages.txt
   * TrueSnippets.txt  
