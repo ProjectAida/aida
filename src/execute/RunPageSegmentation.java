@@ -20,8 +20,10 @@ import javax.imageio.ImageIO;
 import models.Image;
 import blurring.ImageBlurrer;
 
-public class RunPageSegmentation {
+import models.ReadIni;
+import models.EnumCollection;
 
+public class RunPageSegmentation {
 	/**
 	 * This main function is responsible for running the Full-page segmentation algorithm.
 	 * It reads in either a single .jpg image or a text list of .jpg images and performs segmentation.
@@ -29,7 +31,7 @@ public class RunPageSegmentation {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		if(args.length > 0){
+                if(args.length > 0){
             //process images from a text file list
 			if(args[0].contains(".txt")){
 				String imageList = args[0];
@@ -62,9 +64,9 @@ public class RunPageSegmentation {
 				}
             //process only one image
 			}else if(args[0].contains(".jpg")){
-				Image img = importImage(args[0]);
+                                Image img = importImage(args[0]);
 				try{
-					segmentImage(img, false);
+					segmentImage(img, true);
 				} catch(Exception e){
 					e.printStackTrace();
 					//System.out.println("ERROR: Unable to segment "+img.getName()+"\nPlease make sure that the page isn't rotated");
@@ -212,11 +214,19 @@ public class RunPageSegmentation {
 	 * @param img
 	 */
 	public static void segmentImage(Image img, boolean shouldShowColumns){
-		ImageBlurrer imb = new ImageBlurrer();
+            
+            ReadIni myConfig = new ReadIni();
+            EnumCollection myEnums = new EnumCollection();
+	
+            ImageBlurrer imb = new ImageBlurrer();
         
         //boolean values indicate if we want to output the intermediate stages of binarizing the image
         //Stages: contrasted, binary, binary with Morphology
-		imb.binarizeSegment(img, false, false, false);
+                
+                // 9.17.2017. Added this branch to skip binarization if image is already binarized
+                if(myConfig.GetNeedBinarizing() == myEnums.GetIntOfTrueFalse("FALSE")){
+                    imb.binarizeSegment(img, false, false, false);
+                }
 		
 		int shouldContinue = img.findColumnBreaks();
         System.out.println(shouldContinue);
