@@ -1,6 +1,6 @@
 #!/bin/bash
 cd src/
-javac execute/RunPageSegmentation.java
+javac -cp ../tif_jar/jai_imageio.jar:./ execute/RunPageSegmentation.java
 cd ../
 
 beginYear=$1
@@ -22,7 +22,8 @@ for i in $( ls ); do
             totalCount=$((totalCount + 1))
             current=$(pwd)
             cd $src
-            java execute/RunPageSegmentation $current/$k
+#java execute/RunPageSegmentation $current/$k
+            java -cp ../tif_jar/jai_imageio.jar:./ execute/RunPageSegmentation $current/$k
             cd $current
         done
             cd ..

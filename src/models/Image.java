@@ -498,8 +498,8 @@ public class Image {
         }
         Collections.sort(columnWidth);
         
-        //Rule 2,3: check for less than three columns and check if columns are on more than half of the page
-        if(1<columns.size() && columns.size()<3){
+        //Rule 2,3: check for less than 2 columns and check if columns are on more than half of the page
+        if(columns.size()<1){
             this.setColumnBreaks(columns);
             return 2;
         }

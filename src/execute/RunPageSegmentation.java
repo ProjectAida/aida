@@ -23,6 +23,7 @@ import blurring.ImageBlurrer;
 import models.ReadIni;
 import models.EnumCollection;
 
+
 public class RunPageSegmentation {
 	/**
 	 * This main function is responsible for running the Full-page segmentation algorithm.
@@ -63,7 +64,7 @@ public class RunPageSegmentation {
 					e.printStackTrace();
 				}
             //process only one image
-			}else if(args[0].contains(".jpg")){
+			}else if(args[0].contains(".jpg") || args[0].contains(".tif")){
                                 Image img = importImage(args[0]);
 				try{
 					segmentImage(img, true);
@@ -115,7 +116,7 @@ public class RunPageSegmentation {
 					int numOfImages = images.length;
 					int currentImage = 0;
 					for(File image : images){
-						if(image.getName().contains(".jpg")){
+						if(image.getName().contains(".jpg") || image.getName().contains(".tif")){
 							currentImage++;
 							String path = image.getAbsolutePath();
 							Image img = importImage(path);
@@ -201,9 +202,35 @@ public class RunPageSegmentation {
 			}
 		}
 		
+                // Copy Yi's code
+                /***start***/
+                Boolean isBin = true;
+                /***Safety check***/
+                for(int i = 0; i < h; i++){
+                        for(int j = 0; j < w; j++) {
+                                if(pixels[i][j] != 1) {
+                                        isBin = false;
+                                }
+                                if(pixels[i][j] == 0) {
+                                        isBin = true;
+                                }
+                                if(!isBin) { break; }
+                        }
+                        if(!isBin) { break; }
+                }
+                if(isBin) {
+                        for(int i = 0; i < h; i++){
+                                for(int j = 0; j < w; j++) {
+                                        if(pixels[i][j] == 1){
+                                                pixels[i][j] = 255;
+                                        }
+                                }
+                        }
+                }
+                /***end***/
 		img.setByteImage(pixels);
 		img.setByteImage2(pixels);
-		
+               		
 		img.setName(inputFilename.substring(inputFilename.lastIndexOf("/")+1));
 			
 		return img;
@@ -215,18 +242,15 @@ public class RunPageSegmentation {
 	 */
 	public static void segmentImage(Image img, boolean shouldShowColumns){
             
-            ReadIni myConfig = new ReadIni();
-            EnumCollection myEnums = new EnumCollection();
-	
             ImageBlurrer imb = new ImageBlurrer();
         
         //boolean values indicate if we want to output the intermediate stages of binarizing the image
         //Stages: contrasted, binary, binary with Morphology
                 
                 // 9.17.2017. Added this branch to skip binarization if image is already binarized
-                if(myConfig.GetNeedBinarizing() == myEnums.GetIntOfTrueFalse("FALSE")){
+                //if(myConfig.GetNeedBinarizing() == myEnums.GetIntOfTrueFalse("TRUE")){
                     imb.binarizeSegment(img, false, false, false);
-                }
+                //}
 		
 		int shouldContinue = img.findColumnBreaks();
         System.out.println(shouldContinue);
