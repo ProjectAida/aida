@@ -111,3 +111,4 @@ All output files created by the program are created in the data directory:
 ## Notes ##
 * If using IDE, run the command line script first before running the file in
   the IDE.
+* If one want to skip a binarizing process since the image is already binarized (such as .tiff), edit user.ini file  NeedBinarizing=FALSE.
