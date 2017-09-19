@@ -12,7 +12,7 @@ package models;
 public class EnumCollection {
     // Enumurator for the Image Types
     private enum EnumImageType{
-        TIFF, JPEG
+        TIF, JPG
     }
     // Enumurator for the T/F
     private enum EnumTrueFalse{
@@ -24,5 +24,11 @@ public class EnumCollection {
     }
     public int GetIntOfTrueFalse(String s){
         return EnumTrueFalse.valueOf(s.toUpperCase()).ordinal();
+    }
+    public static boolean ContainsImageType(String s){
+        for (EnumImageType enumImage: EnumImageType.values()){
+            return (enumImage.name().equalsIgnoreCase(s)) ? true : false;
+        }
+        return false;
     }
 }

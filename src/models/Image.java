@@ -357,6 +357,7 @@ public class Image {
      * by continuous, straight black lines.
      */
     public int findColumnBreaks(){
+        
         ArrayList<Integer> whiteColumns = new ArrayList<Integer>();
         int whiteCount;
         int columnCount = 0;
@@ -372,7 +373,7 @@ public class Image {
                 if(columnCount < COLUMN_COUNT_MAX){
                     whiteColumns.add(j);
                 }
-            }else {
+            }else if(whiteCount < (this.vertical*.9)){
                 if(whiteColumns.contains(j-1)){
                     columnCount = 0;
                 }else if(!whiteColumns.contains(j-1) && columnCount >= COLUMN_COUNT_MAX){
@@ -411,20 +412,14 @@ public class Image {
             int maxBlack = 0;
             int prev = 255;
             for(int n = 0; n < this.vertical; n++){
-                // #1. IF (current pixel is black) AND (previous pixel is black)
                 if(this.byteImage[n][m] == 0 && prev == 0){
                     blackContinuous++;
-                }
-                // #2. ELSE IF (current pixel is NOT black) AND (previous pixel is black)
-                else if(this.byteImage[n][m] != 0 && prev == 0){
-                    // #2.1. IF (continued black pixel EXCEEDS max)
+                }else if(this.byteImage[n][m] != 0 && prev == 0){
                     if(maxBlack < blackContinuous){
                         maxBlack = blackContinuous;
                     }
-                    // #2.2. INIT (continued black pixel)
                     blackContinuous = 0;
                     prev = 255;
-                    // #3. ELSE IF (current pixel is black) AND (previous pixel is white)
                 }else if(this.byteImage[n][m] == 0 && prev == 255){
                     blackContinuous++;
                     prev = 0;
@@ -477,83 +472,85 @@ public class Image {
         Collections.sort(columns);
         columnsToRemove.clear();
         
-        //Rule 1: check for no columns found
+        //Rule 1: check if there is only on column
         if(columns.size() == 0){
-            this.setColumnBreaks(columns);
-            return 1;
+            columns.add(0,0);
+            columns.add(this.horizontal);
         }
-        
-        // Collect width info
-        ArrayList<Integer> columnWidth = new ArrayList<Integer>();
-        // If there are 2 columns ...
-        if(columns.size() == 1){
-            columnWidth.add(columns.get(0));
-            columnWidth.add(this.horizontal - columns.get(0));
+        //Rule 2: check for 2 columns
+        else if(columns.size()==1){
+            //columnWidth.add(columns.get(0));
+            //columnWidth.add(this.horizontal - columns.get(0));
+            columns.add(0,0);
+            columns.add(this.horizontal);
         }
-        // If there are more than 2 columns ...
+        // columns.size() is 2
+        else if (columns.size()==2){
+            // columns(0) is around the center
+            if((this.horizontal/2)*(9/10) < columns.get(0) && columns.get(0) < (this.horizontal/2)*(11/10)){
+                columns.add(0,0);
+            }
+            // columns(1) is around the center
+            else{
+                columns.add(this.horizontal);
+            }
+        }
         else{
+            // Collect column info
+            ArrayList<Integer> columnWidth = new ArrayList<Integer>();
             for(int p = 0; p < columns.size()-1; p++){
                 columnWidth.add(columns.get(p+1)-columns.get(p));
             }
-        }
-        Collections.sort(columnWidth);
-        
-        //Rule 2,3: check for less than 2 columns and check if columns are on more than half of the page
-        if(columns.size()<1){
-            this.setColumnBreaks(columns);
-            return 2;
-        }
-        
-        if(columns.size()!=1 && (columns.get(0)>this.horizontal/2 || columns.get(columns.size()-1) < horizontal/2)){
-            this.setColumnBreaks(columns);
-            return 3;
-        }
-        
-        int numOfColumnWidths = columnWidth.size();
-        
-        int columnWidthMean = 0;
-        for(int width : columnWidth){
-            columnWidthMean += width;
-        }
-        columnWidthMean = columnWidthMean/numOfColumnWidths;
-        int columnWidthVarience = 0;
-        for(int width : columnWidth){
-            int temp = width - columnWidthMean;
-            columnWidthVarience += Math.pow(temp,2);
-        }
-        columnWidthVarience = columnWidthVarience/numOfColumnWidths;
-        double columnWidthStdDev = Math.ceil(Math.sqrt(columnWidthVarience));
-        System.out.println("Std Dev: "+columnWidthStdDev);
-        
-        //Rule 4: Check column width Std Dev. Good images were experimentally determined to be below 150 Std Dev.
-        if(columnWidthStdDev > 150) {
-            this.setColumnBreaks(columns);
-            return 4;
-        }
-        
-        //Add in columns based on the average width, columns added from the right hand side
-        int averageWidth = columnWidth.get((int) Math.floor(columnWidth.size()/2));
-        for(int p = columns.size()-1; p >= 1; p--){
-            if(columns.get(p-1) < columns.get(p)-averageWidth-COLUMN_SEPARATION_MIN){
-                columns.add(p, columns.get(p)-averageWidth);
-                p++;
-            }else if(columns.get(p-1) > columns.get(p)-averageWidth+COLUMN_SEPARATION_MIN){
-                columns.remove(p-1);
-                if(columns.get(p-1)-averageWidth > 0){
-                    columns.add(p-1, columns.get(p-1)-averageWidth);
+            Collections.sort(columnWidth);
+            
+            for(int p = 0; p < columns.size()-1; p++){
+                columnWidth.add(columns.get(p+1)-columns.get(p));
+            }
+            Collections.sort(columnWidth);
+            //Rule 3: check if columns are on more than half of the page
+            
+            if(columns.get(0)>this.horizontal/2 || columns.get(columns.size()-1) < horizontal/2){
+                this.setColumnBreaks(columns);
+                return 3;
+            }
+            
+            int numOfColumnWidths = columnWidth.size();
+            
+            int columnWidthMean = 0;
+            for(int width : columnWidth){
+                columnWidthMean += width;
+            }
+            columnWidthMean = columnWidthMean/numOfColumnWidths;
+            int columnWidthVarience = 0;
+            for(int width : columnWidth){
+                int temp = width - columnWidthMean;
+                columnWidthVarience += Math.pow(temp,2);
+            }
+            columnWidthVarience = columnWidthVarience/numOfColumnWidths;
+            double columnWidthStdDev = Math.ceil(Math.sqrt(columnWidthVarience));
+            System.out.println("Std Dev: "+columnWidthStdDev);
+            
+            //Rule 4: Check column width Std Dev. Good images were experimentally determined to be below 150 Std Dev.
+            if(columnWidthStdDev > 150) {
+                this.setColumnBreaks(columns);
+                return 4;
+            }
+            
+            //Add in columns based on the average width, columns added from the right hand side
+            int averageWidth = columnWidth.get((int) Math.floor(columnWidth.size()/2));
+            for(int p = columns.size()-1; p >= 1; p--){
+                if(columns.get(p-1) < columns.get(p)-averageWidth-COLUMN_SEPARATION_MIN){
+                    columns.add(p, columns.get(p)-averageWidth);
+                    p++;
+                }else if(columns.get(p-1) > columns.get(p)-averageWidth+COLUMN_SEPARATION_MIN){
+                    columns.remove(p-1);
+                    if(columns.get(p-1)-averageWidth > 0){
+                        columns.add(p-1, columns.get(p-1)-averageWidth);
+                    }
                 }
             }
-        }
-        
-        //If no edge column is found, insert the column
-        
-        
-        if(columns.size()==1){
-            columns.add(0);
-            columns.add(this.horizontal);
-            Collections.sort(columns);
-        }
-        else{
+            
+            //If no edge column is found, insert the column
             while(columns.get(0) > this.horizontal*.1 && columns.get(0)-averageWidth > 0){
                 columns.add(0, columns.get(0)-averageWidth);
             }
