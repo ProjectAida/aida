@@ -37,7 +37,7 @@ public class ReadIni {
     public ReadIni(){
         Properties p = new Properties();
         try{
-            p.load(new FileInputStream("/Users/Mike/NetBeansProjects/aida/user.ini"));
+            p.load(new FileInputStream("../user.ini"));
             // Load members' info from user.ini file
             this.ImageType = myEnums.GetIntOfImageType(p.getProperty("ImageType").toUpperCase());
             this.NeedBinarizing = myEnums.GetIntOfTrueFalse(p.getProperty("NeedBinarizing").toUpperCase());
