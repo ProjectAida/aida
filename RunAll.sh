@@ -5,7 +5,7 @@ echo "AIDA: Poem Identifier"
 
 cd data/
 find Output_Snippets/ -type f > snippetPathList.txt
-find Output_Snippets/ -not -path '*/\.*' -type f -printf "%f\n" > SnippetNameList.txt
+find Output_Snippets/ -not -path '*/\.*' -type f -name '*.jpg' -exec basename {} \; > SnippetNameList.txt;
 cd ../
 NOME=$1
 c=0
