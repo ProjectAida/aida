@@ -17,6 +17,8 @@ import models.BinaryImage;
 import models.BlurredImage;
 import models.Image;
 import blurring.ImageBlurrer;
+import models.EnumCollection;
+import models.ReadIni;
 
 /**
  * The method that is responsible for all processes. It calls methods from blurring.ImageBlurrer to blur, binarize and use 
@@ -28,6 +30,9 @@ import blurring.ImageBlurrer;
  */
 public class RunProgram {
 	public static void main(String args[]) throws IOException{
+            ReadIni myConfig = new ReadIni();
+            EnumCollection myEnums = new EnumCollection();
+            
 		int d = Integer.parseInt(args[0]);
 		final int tripleRegular = 1,consolidated = 2,train = 3,test = 4;
 
@@ -47,7 +52,7 @@ public class RunProgram {
 
 		// Manual Controls
 		int blurMode = consolidated;	// tripleRegular or consolidated
-		int whatSet = test;			// 'test' for testing set of 7500+ snippets. 'train' for 400 training snippets
+		int whatSet = train;			// 'test' for testing set of 7500+ snippets. 'train' for 400 training snippets
 		boolean outCustom = true;		// Set true output the image, false when output of images themselves is not necessary
 		boolean outBinary = true;		// Set true to output binary images
 		boolean outBlurred= false;		// Set true to output blurred images.
@@ -128,7 +133,11 @@ public class RunProgram {
 		//		---------------------------------------------------------------------------
 
 		imb.blurImage(img5 ,outBlurred);
-		imb.binarizeImage(img5, outBinary);
+		
+                // 9.17.2017. Added this branch to skip binarization if image is already binarized
+                if(myConfig.GetNeedBinarizing() == myEnums.GetIntOfTrueFalse("FALSE")){
+                    imb.binarizeImage(img5, outBinary);   
+                }
 		if(isCustom){
 			imb.customBlur(img5,outCustom);
 		}
@@ -222,7 +231,8 @@ public class RunProgram {
 		int w=0,h=0;
 		try {
 			System.out.println("Loading Image..");
-			File inputImageFile = new File(Constants.data, inputFilename);
+			//File inputImageFile = new File(Constants.data, inputFilename);
+                        File inputImageFile = new File("/Users/Mike/aida/data/", inputFilename);
 			BufferedImage inputImage = ImageIO.read(inputImageFile);
 
 			Raster raster = inputImage.getData();
