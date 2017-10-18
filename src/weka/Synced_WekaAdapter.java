@@ -5,17 +5,14 @@ import global.Constants;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Set;
 
-import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.evaluation.Prediction;
 import weka.classifiers.functions.MultilayerPerceptron;
@@ -29,17 +26,17 @@ import weka.core.Instances;
  * @author mdatla
  *
  */
-public class WekaAdapter implements Prediction{
+public class Synced_WekaAdapter implements Prediction{
 
 	private Instances trainSet;
 	private Instances testSet;
 	private String trainSetPath;
 	private String testSetPath;
 
-	public WekaAdapter(String trainSetPath){
+	public Synced_WekaAdapter(String trainSetPath){
 		this.trainSetPath=trainSetPath;
 	}
-	public WekaAdapter(String trainSetPath, String TestSetPath){
+	public Synced_WekaAdapter(String trainSetPath, String TestSetPath){
 		this.trainSetPath=trainSetPath;
 		this.testSetPath=TestSetPath;
 
@@ -56,40 +53,18 @@ public class WekaAdapter implements Prediction{
 	}
 
 	public void runDecisionTree() throws Exception{
-		Instances test,train,testCopy,trainCopy;
-		Instances test2 = null;
-
-		
+		Instances test,train;
 		trainSet.randomize(new Random(123));
+
 		trainSet.deleteAttributeAt(0);
 
-		Instances trainSetCopy = new Instances(trainSet, 0, trainSet.numInstances());
-		trainSet.deleteAttributeAt(0);
-		Instances testSetCopy = new Instances(testSet, 0, testSet.numInstances());
-		testSet.deleteAttributeAt(0);
-
-
-		File trueSnippetOut = new File(Constants.data,"TrueSnippets.txt");
-		File falseSnippetOut = new File(Constants.data,"FalseSnippets.txt");
-		File truePageOut = new File(Constants.data,"TruePages.txt");
-		File falsePageOut = new File(Constants.data,"FalsePages.txt");
-		BufferedWriter trueSnippetStream = new BufferedWriter(new FileWriter(trueSnippetOut, false));
-		BufferedWriter falseSnippetStream = new BufferedWriter(new FileWriter(falseSnippetOut, false));
-		BufferedWriter truePageStream = new BufferedWriter(new FileWriter(truePageOut, false));
-		BufferedWriter falsePageStream = new BufferedWriter(new FileWriter(falsePageOut, false));
-		StringBuilder sbSnippetTrue = new StringBuilder();
-		StringBuilder sbSnippetFalse = new StringBuilder();
-		StringBuilder sbPageTrue = new StringBuilder();
-		StringBuilder sbPageFalse = new StringBuilder();
-		//for(int i=0;i<10;i++){
+		for(int i=0;i<10;i++){
 
 			double correct = 0;
-			train = trainSet;
-			test = testSet;
-			trainCopy = trainSetCopy;
-			testCopy = testSetCopy;
-		//	test = trainSet.testCV(2,i);
-		//	train = trainSet.trainCV(10, i);
+
+			test = trainSet.testCV(10,i);
+			train = trainSet.trainCV(10, i);
+
 			J48 tree = new J48();
 			tree.setReducedErrorPruning(true);
 			tree.setConfidenceFactor((float) 0.15);
@@ -105,10 +80,7 @@ public class WekaAdapter implements Prediction{
 			tree.buildClassifier(train);
 
 			System.out.println(tree);
-	//		Evaluation eval = new Evaluation(train);
-	//		eval.evaluateModel(tree, test);
-	//		System.out.println(eval.toSummaryString("\nResults\n======\n", false));
-			
+
 			double total = test.numInstances();
 
 			System.out.println(correct);
@@ -126,99 +98,7 @@ public class WekaAdapter implements Prediction{
 			}
 			System.out.println("Accuracy of the Decision Tree is: " + (correct / total)*100 +"%");
 			System.out.println("==================================================================================");
-	//	}
-			
-			
-			ArrayList<String> trueParentList = new ArrayList<String>();
-			ArrayList<String> falseParentList= new ArrayList<String>();
-			ArrayList<String> fullList = new ArrayList<String>();
-			int pos_num=0, neg_num=0;
-			for (int k = 0; k < test.numInstances(); k++) {
-					String[] snippetName1= testCopy.instance(k).toString(0).split("_");
-					String Name = snippetName1[0]+"_"+snippetName1[1]+"_"+snippetName1[2]+"_"+snippetName1[3];
-					if(!fullList.contains(Name)){
-						fullList.add(Name);
-					}
-					
-					if(tree.classifyInstance(test.instance(k))==1.0){
-						pos_num++;
-						String[] snippetName= testCopy.instance(k).toString(0).split("_");
-						String parentName = snippetName[0]+"_"+snippetName[1]+"_"+snippetName[2]+"_"+snippetName[3];
-						//System.out.print("True, "+pos_num+", "+testCopy.instance(k).toString(0)+", "+parentName+", ");
-						if(!trueParentList.contains(parentName)){
-							trueParentList.add(parentName);
-						} 
-						sbSnippetTrue.append(testCopy.instance(k).toString(0)+"\n");
-					} else /*if(network.classifyInstance(test.instance(k))==0.0)*/{
-						neg_num++;
-						String[] snippetName= testCopy.instance(k).toString(0).split("_");
-						String parentName = snippetName[0]+"_"+snippetName[1]+"_"+snippetName[2]+"_"+snippetName[3];
-						//System.out.print("False, "+neg_num+", "+testCopy.instance(k).toString(0)+", "+parentName+", ");
-						if(!falseParentList.contains(parentName) && !trueParentList.contains(parentName)){
-							falseParentList.add(parentName);
-						}
-						sbSnippetFalse.append(testCopy.instance(k).toString(0)+"\n");
-					}
-			}
-
-			
-			//System.out.println("Before:\n TrueParentList:\n----------");
-			//for(String s : trueParentList){
-			//	System.out.println(s);
-			//}
-			//System.out.println("Size:"+trueParentList.size());
-			//System.out.println("FalseParentList:\n -----------");
-			//for(String s : falseParentList){
-	                //        System.out.println(s);
-	                //}
-			//System.out.println("Size:"+falseParentList.size());
-			
-//			ArrayList<String> falseParentTemp = new ArrayList<String>();
-//			for (String s : falseParentList){
-//				falseParentTemp.add(s);
-//			}
-//			for(String falseName : falseParentTemp){
-//				if (trueParentList.contains(falseName)){
-			//		falseParentList.remove(falseName);
-//				}
-//			}
-
-			//System.out.println("After:\n TrueParentList:\n---------");
-	                //for(String s : trueParentList){
-	                //        System.out.println(s);
-	                //}
-			//System.out.println("Size:"+trueParentList.size());
-	                //System.out.println("FalseParentList:\n--------");
-	                //for(String s : falseParentList){
-	                //       System.out.println(s);
-	                //}
-			//System.out.println("Size:"+falseParentList.size());
-
-
-
-			trueSnippetStream.append(sbSnippetTrue.toString());
-			trueSnippetStream.flush();
-			trueSnippetStream.close();
-				
-			falseSnippetStream.append(sbSnippetFalse.toString());
-			falseSnippetStream.flush();
-			falseSnippetStream.close();
-
-			for(String s: trueParentList){
-				sbPageTrue.append(s+"\n");
-			}
-
-			truePageStream.append(sbPageTrue.toString());
-			truePageStream.flush();
-			truePageStream.close();
-				
-			for(String s: falseParentList){
-				sbPageFalse.append(s+"\n");
-			}
-
-			falsePageStream.append(sbPageFalse.toString());
-			falsePageStream.flush();
-			falsePageStream.close();
+		}
 	}
 
 	/**
@@ -226,45 +106,17 @@ public class WekaAdapter implements Prediction{
 	 * Training time is set to 1000, and the results are compiled into a *.csv file. 
 	 * @throws Exception
 	 */
-
-	//public void runKNN() throws Exception{
-		
-	//		 Instances test,train;
-	//			trainSet.randomize(new Random(123));
-
-	//.deleteAttributeAt(0);
-		
-	//			train = trainSet;
-			
-			
-	 
-	 
-	//		Classifier ibk = new IBk();		
-	//		ibk.buildClassifier(train);
-	//		System.out.println(ibk);
-	 
-	//	}
-	
-	
-	
 	public void runNeuralNetwork() throws Exception{
 		Instances test,train,testCopy,trainCopy;
 		Instances test2 = null;
 
-		String ini = "../iterationtimes.txt";
-		File inif = new File(ini);
-		InputStreamReader rd = new InputStreamReader(new FileInputStream(inif));
-		BufferedReader br = new BufferedReader(rd);
-		String line = "";
-		line = br.readLine();
-		int iterations = Integer.parseInt(line);
-		//int iterations = 2000;
+		int iterations =1000;
 
 
 		trainSet.randomize(new Random(123));
 
 		Instances trainSetCopy = new Instances(trainSet, 0, trainSet.numInstances());
-		trainSet.deleteAttributeAt(0);
+		//trainSet.deleteAttributeAt(0);
 		Instances testSetCopy = new Instances(testSet, 0, testSet.numInstances());
 		testSet.deleteAttributeAt(0);
 
@@ -290,9 +142,6 @@ public class WekaAdapter implements Prediction{
 		MultilayerPerceptron network = new MultilayerPerceptron();
 		network.setTrainingTime(iterations);
 
-		//hidden layer settings
-//		network.setHiddenLayers("22");
-		
 		train = trainSet;
 		test = testSet;
 		trainCopy = trainSetCopy;
@@ -318,26 +167,38 @@ public class WekaAdapter implements Prediction{
 				}
 				
 				if(network.classifyInstance(test.instance(k))==1.0){
-					pos_num++;
-					String[] snippetName= testCopy.instance(k).toString(0).split("_");
-					String parentName = snippetName[0]+"_"+snippetName[1]+"_"+snippetName[2]+"_"+snippetName[3];
-					//System.out.print("True, "+pos_num+", "+testCopy.instance(k).toString(0)+", "+parentName+", ");
-					if(!trueParentList.contains(parentName)){
-						trueParentList.add(parentName);
-					} 
-					sbSnippetTrue.append(testCopy.instance(k).toString(0)+"\n");
-				} else /*if(network.classifyInstance(test.instance(k))==0.0)*/{
-					neg_num++;
-					String[] snippetName= testCopy.instance(k).toString(0).split("_");
-					String parentName = snippetName[0]+"_"+snippetName[1]+"_"+snippetName[2]+"_"+snippetName[3];
-					//System.out.print("False, "+neg_num+", "+testCopy.instance(k).toString(0)+", "+parentName+", ");
-					if(!falseParentList.contains(parentName) && !trueParentList.contains(parentName)){
-						falseParentList.add(parentName);
-					}
-					sbSnippetFalse.append(testCopy.instance(k).toString(0)+"\n");
+				pos_num++;
+				String[] snippetName= testCopy.instance(k).toString(0).split("_");
+				String parentName = snippetName[0]+"_"+snippetName[1]+"_"+snippetName[2]+"_"+snippetName[3];
+				//System.out.print("True, "+pos_num+", "+testCopy.instance(k).toString(0)+", "+parentName+", ");
+				if(!trueParentList.contains(parentName)){
+					trueParentList.add(parentName);
+					System.out.println("Added");
+				} else{
+					System.out.println("Not Added");
 				}
+				sbSnippetTrue.append(testCopy.instance(k).toString(0)+"\n");
+			} else /*if(network.classifyInstance(test.instance(k))==0.0)*/{
+				neg_num++;
+				String[] snippetName= testCopy.instance(k).toString(0).split("_");
+				String parentName = snippetName[0]+"_"+snippetName[1]+"_"+snippetName[2]+"_"+snippetName[3];
+				//System.out.print("False, "+neg_num+", "+testCopy.instance(k).toString(0)+", "+parentName+", ");
+				if(!falseParentList.contains(parentName) && !trueParentList.contains(parentName)){
+					falseParentList.add(parentName);
+					System.out.println("Added");
+				}else{
+                                        System.out.println("Not Added");
+                                }
+
+				sbSnippetFalse.append(testCopy.instance(k).toString(0)+"\n");
+			}
 		}
 
+		System.out.println("Full List ----------------------");
+		for(String s: fullList){
+			System.out.println(s);
+		}
+		System.out.println(fullList.size());
 		
 		//System.out.println("Before:\n TrueParentList:\n----------");
 		//for(String s : trueParentList){
@@ -350,15 +211,15 @@ public class WekaAdapter implements Prediction{
                 //}
 		//System.out.println("Size:"+falseParentList.size());
 		
-//		ArrayList<String> falseParentTemp = new ArrayList<String>();
-//		for (String s : falseParentList){
-//			falseParentTemp.add(s);
-//		}
-//		for(String falseName : falseParentTemp){
-//			if (trueParentList.contains(falseName)){
+		ArrayList<String> falseParentTemp = new ArrayList<String>();
+		for (String s : falseParentList){
+			falseParentTemp.add(s);
+		}
+		for(String falseName : falseParentTemp){
+			if (trueParentList.contains(falseName)){
 		//		falseParentList.remove(falseName);
-//			}
-//		}
+			}
+		}
 
 		//System.out.println("After:\n TrueParentList:\n---------");
                 //for(String s : trueParentList){
@@ -419,8 +280,8 @@ public class WekaAdapter implements Prediction{
 
 		// FinalResultGenerator is imported to generate results for the parent newspapers and its statistics.
 
-//		FinalResultGenerator rg = new FinalResultGenerator();
-//		rg.generateResults();
+		FinalResultGenerator rg = new FinalResultGenerator();
+		rg.generateResults();
 
 
 

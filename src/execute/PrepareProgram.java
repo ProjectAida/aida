@@ -1,6 +1,7 @@
 package execute;
 
 import java.io.File;
+import java.io.IOException;
 
 import global.Constants;
 
@@ -21,12 +22,30 @@ public class PrepareProgram {
 		File OutputAttribute = new File(Constants.attributeOutputFolder);
 		File OutputAnalysis = new File(Constants.analysisFileDirectory);
 		File OutputSnippets = new File(Constants.Snippets);
-		deleteFolderContent(OutputBinary);
-		deleteFolderContent(OutputCustom);
-		deleteFolderContent(OutputAttribute);
-		deleteFolderContent(OutputBlurred);
-		deleteFolderContent(OutputAnalysis);
-		deleteFolderContent(OutputSnippets);
+//		deleteFolderContent(OutputBinary);
+//		deleteFolderContent(OutputCustom);
+//		deleteFolderContent(OutputAttribute);
+//		deleteFolderContent(OutputBlurred);
+//		deleteFolderContent(OutputAnalysis);
+//		deleteFolderContent(OutputSnippets);
+		if  (!OutputSnippets .exists()  && !OutputSnippets .isDirectory()) {         
+		    OutputSnippets .mkdir();    
+		}
+		if  (!OutputAnalysis .exists()  && !OutputAnalysis .isDirectory()) {         
+			OutputAnalysis .mkdir();    
+		}
+		if  (!OutputAttribute .exists()  && !OutputAttribute .isDirectory()) {         
+			OutputAttribute .mkdir();    
+		}
+		if  (!OutputCustom .exists()  && !OutputCustom .isDirectory()) {         
+			OutputCustom .mkdir();    
+		}
+		if  (!OutputBinary .exists()  && !OutputBinary .isDirectory()) {         
+			OutputBinary .mkdir();    
+		}
+		if  (!OutputBlurred .exists()  && !OutputBlurred .isDirectory()) {         
+			OutputBlurred .mkdir();    
+		}
 		System.out.println("Program Ready...");
 		
 	}

@@ -2,6 +2,7 @@ package blurring;
 
 import global.Constants;
 import models.BlurredImage;
+import models.AdjustedImage;
 import models.BinaryImage;
 import models.Image;
 import featureExtraction.*;
@@ -38,11 +39,8 @@ public class ImageBlurrer {
 	 */
 	public void importFeatures(Image im) throws IOException{
 		System.out.println("Extracting Features...");		
-		BlurredImage bli = new BlurredImage(im);
-		BinaryImage bni = new BinaryImage(bli);
-		bni.setBinaryImagePixels(im.getByteImage());
+		BinaryImage bni = new BinaryImage(im);
 
-		bni.setBinaryImagePixels2(bni.getBinaryImagePixels());
 		FeatureExtraction fe = new FeatureExtraction(bni);
 		fe.computeColumnWidths();
 		fe.computeRowDepths();
@@ -158,15 +156,13 @@ public class ImageBlurrer {
 	public void customBlur(Image im,  boolean shouldOutput){
 		int w = im.getHorizontal(), h = im.getVertical();
 
-		BlurredImage bli = new BlurredImage(im);
-		BinaryImage bni = new BinaryImage(bli);
-		bni.setBinaryImagePixels(im.getByteImage());
+		BinaryImage bni = new BinaryImage(im);
 
 		CustomBlurrerEngine cbe = new CustomBlurrerEngine();
-		bni.setBinaryImagePixels(cbe.blurImage(bni));
+		bni.setByteImage((cbe.consolidateImage(bni)).getByteImage());
 
 		BufferedImage OutputImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
-		int[][] pixels3 = bni.getBinaryImagePixels();
+		int[][] pixels3 = bni.getByteImage();
 		for (int y = 0; y < bni.getVertical(); y++) {
 			for (int x = 0; x < bni.getHorizontal(); x++) {
 				//The following line offsets the pixels' values to fix the 'blue problem'
@@ -182,7 +178,7 @@ public class ImageBlurrer {
 			outputImage(OutputImage, Constants.customOutput,im.getName());
 		}
 		
-		im.setByteImage(bni.getBinaryImagePixels());
+		im.setByteImage(bni.getByteImage());
 
 	}
 
@@ -196,13 +192,12 @@ public class ImageBlurrer {
 		int w = im.getHorizontal(), h = im.getVertical();
 
 		BlurredImage bli = new BlurredImage(im);
-		bli.setBlurredImagePixels(im.getByteImage());
 		SingleThresholdFinder tf = new SingleThresholdFinder();
-		BinaryImage bni = tf.generateBinaryImage(bli);
+		BinaryImage bni = tf.generateBinaryImage(im);
 		BufferedImage OutputImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
 
 		/***** This Segment is meant for printing out Binary images*****/
-		int[][] pixels2 = bni.getBinaryImagePixels();
+		int[][] pixels2 = bni.getByteImage();
 		for (int y = 0; y < bni.getVertical(); y++) {
 			for (int x = 0; x < bni.getHorizontal(); x++) {
 				//The following line offsets the pixels' values to fix the 'blue problem'
@@ -217,8 +212,8 @@ public class ImageBlurrer {
 			outputImage(OutputImage, Constants.binaryOutput,im.getName());
 		}
 
-		im.setByteImage(bni.getBinaryImagePixels());
-		im.setByteImage2(bni.getBinaryImagePixels());
+		im.setByteImage(bni.getByteImage());
+		im.setByteImage2(bni.getByteImage());
 
 	}
 	
@@ -232,7 +227,6 @@ public class ImageBlurrer {
 		int w = im.getHorizontal(), h = im.getVertical();
 		
 		BlurredImage bli = new BlurredImage(im);
-		bli.setBlurredImagePixels(im.getByteImage());
 		SingleThresholdFinder stf = new SingleThresholdFinder();
 		BinaryImage bni;
         
@@ -275,7 +269,7 @@ public class ImageBlurrer {
                 outputImage(OutputImage, Constants.binaryOutput,"contrasted.jpg");
             }
 			
-			bli.setBlurredImagePixels(pixels);
+			bli.setByteImage(pixels);
 			bni = stf.generateBinaryImage(bli);
 		}
 		else{
@@ -286,7 +280,7 @@ public class ImageBlurrer {
             BufferedImage OutputImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
             
             /***** This Segment is meant for printing out Binary images*****/
-            int[][] pixels2 = bni.getBinaryImagePixels();
+            int[][] pixels2 = bni.getByteImage();
             for (int y = 0; y < bni.getVertical(); y++) {
                 for (int x = 0; x < bni.getHorizontal(); x++) {
                     //The following line offsets the pixels' values to fix the 'blue problem'
@@ -301,7 +295,7 @@ public class ImageBlurrer {
         //To change the number of times Erosion or Dilation runs, simply change the constants
         //located at the top of this file.
 		Morphology morph = new Morphology();
-		int[][] erodedPixels = bni.getBinaryImagePixels();
+		int[][] erodedPixels = bni.getByteImage();
 		for(int i = 0; i < DILATION_NUM; i++){
 			erodedPixels = morph.Dilation(erodedPixels);
 		}
@@ -309,7 +303,7 @@ public class ImageBlurrer {
 			erodedPixels = morph.Erosion(erodedPixels);
 		}
 		
-		bni.setBinaryImagePixels(erodedPixels);
+		bni.setByteImage(erodedPixels);
 		
         if(shouldOutputBinaryCleaned) {
             BufferedImage OutputImage2 = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
@@ -324,11 +318,42 @@ public class ImageBlurrer {
             outputImage(OutputImage2, Constants.binaryOutput, baseName+"_cleaned.jpg");
         }
 		
-		im.setByteImage(bni.getBinaryImagePixels());
+		im.setByteImage(bni.getByteImage());
 
 	}
 	
-	
+	/**
+	 * This method is responsible for adjust the image passed as a parameter, and output the image to OutPut_Adjusted/ directory.
+	 * @param im
+	 * @param shouldOutput
+	 */
+	public void adjustImage(Image im, boolean shouldOutput) {
+		AdjustedImage adjIm = new AdjustedImage(im);
+		
+		System.out.println("Adjusting Contrast..");
+		adjIm.AdjustContrast();
+
+		if(shouldOutput){
+			BufferedImage OutputImage = new BufferedImage(adjIm.getHorizontal(),
+					adjIm.getVertical(),
+					BufferedImage.TYPE_INT_RGB);
+			
+			int[][] pixels2 = adjIm.getByteImage();
+			for (int y = 0; y < adjIm.getVertical(); y++) {
+				for (int x = 0; x < adjIm.getHorizontal(); x++) {
+					//The following line offsets the pixels' values to fix the 'blue problem'
+					int value = pixels2[y][x] << 16 | pixels2[y][x] << 8 | pixels2[y][x];
+					OutputImage.setRGB(x, y, value);
+				}
+			}
+			
+			System.out.println("Writing Binary Adjusted Image..");
+			outputImage(OutputImage, Constants.adjustedOutput,im.getName());
+		}
+		
+		im.setByteImage(adjIm.getByteImage());
+		
+	}
 
 	/**
 	 * This method is responsible for blurring the image passed as a parameter, and output the image to Output_Blurred/ directory.
@@ -341,12 +366,17 @@ public class ImageBlurrer {
 		int w = im.getHorizontal(), h = im.getVertical();
 
 		System.out.println("Blurring..");
+		int[][] blurredByteImg = new int[h][w];
 		for(int i=0;i<h;i++){
 			for(int j=0;j<w;j++){
-				im.byteImage[i][j] = this.getAverage(im,i,j,im.getBlurLevel());
+				blurredByteImg[i][j] = this.getAverage(im,i,j,im.getBlurLevel());
 			}
 		}
-
+		/*
+		 * problematic
+		 */
+		im.setByteImage(blurredByteImg);
+		
 		BufferedImage OutputImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
 		System.out.println("Preparing Image...");
 
@@ -391,7 +421,7 @@ public class ImageBlurrer {
 				upperLC=true;
 		int countFalse = 0;   // this variable keeps track of the number of corners that are out of bounds.
 
-		int[][] img = im.byteImage;
+		int[][] img = im.getByteImage();
 		double result=0;
 
 		// This cluster checks if the corner is out of bounds. Will be set to false if pixel is out of bounds.
@@ -540,8 +570,9 @@ public class ImageBlurrer {
 
 	public void outputImage(BufferedImage image, String path, String name){
 		File outputFile = new File(path,name);
+
 		try {
-			ImageIO.write(image, "jpg", outputFile);
+			ImageIO.write(image, "png", outputFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -42,7 +42,7 @@ public class JaggedStatFinder {
 		for(int i = 20; i < binaryImg.getVertical()-20; i++){
 			blackLineSize = 0;
 			for(int j = 0; j < binaryImg.getHorizontal(); j++){
-				if(binaryImg.getBinaryImagePixels()[i][j] == 0){
+				if(binaryImg.getByteImage()[i][j] == 0){
 					
 					blackLineSize++;
 					

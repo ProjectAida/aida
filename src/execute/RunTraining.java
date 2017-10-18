@@ -21,7 +21,8 @@ public class RunTraining {
 			System.out.println("Reading Dataset...");
 			wa.readDataset();
 			System.out.println("Running Neural Network...");
-			wa.runNeuralNetwork();	
+			wa.runNeuralNetwork();
+			//wa.runDecisionTree();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

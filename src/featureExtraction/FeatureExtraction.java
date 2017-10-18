@@ -112,7 +112,7 @@ public class FeatureExtraction {
 			stillBackground = true;
 			int j = WOFFSET;  
 			while  (stillBackground && j < WIDTH - WOFFSET)  {
-				if (image.getBinaryImagePixels()[i][j] == OBJECT)
+				if (image.getByteImage()[i][j] == OBJECT)
 					stillBackground = false;
 				else
 					numPixSoFarFromLeft++;
@@ -124,7 +124,7 @@ public class FeatureExtraction {
 			stillBackground = true;
 			j = WIDTH - WOFFSET;  
 			while  (stillBackground && j >= WOFFSET)  {
-				if (image.getBinaryImagePixels()[i][j] == OBJECT)
+				if (image.getByteImage()[i][j] == OBJECT)
 					stillBackground = false;
 				else
 					numPixSoFarFromRight++;
@@ -175,7 +175,7 @@ public class FeatureExtraction {
 			numPixSoFar = 0;
 			int i = DOFFSET;  
 			while  (i < DEPTH - DOFFSET)  {
-				if (image.getBinaryImagePixels()[i][j] == OBJECT){
+				if (image.getByteImage()[i][j] == OBJECT){
 					// we have found the first break of background pixels gap
 					if (numPixSoFar > 0) {  // only update if we have accumulated
 						rowDepths[k][j] = numPixSoFar;						//						System.out.println(k+","+j+","+numPixSoFar);
@@ -306,7 +306,7 @@ public class FeatureExtraction {
 			isConsecutive=true;
 			int j = WOFFSET;
 			while (j < WIDTH-WOFFSET && isConsecutive)  {
-				if (image.getBinaryImagePixels()[i][j] == OBJECT)  {
+				if (image.getByteImage()[i][j] == OBJECT)  {
 					lineLength[i]+=1;
 					j++;
 				}

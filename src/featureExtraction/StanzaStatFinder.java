@@ -36,7 +36,7 @@ public class StanzaStatFinder {
 
 			for (int j = 20; j < binaryImg.getHorizontal()-20; j++) {
 
-				if(binaryImg.getBinaryImagePixels()[i][j] == 255){
+				if(binaryImg.getByteImage()[i][j] == 255){
 					whiteSpaceSize++;
 				} else {
 					if(whiteSpaceSize != 0){

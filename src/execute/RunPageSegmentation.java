@@ -12,12 +12,10 @@ import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-
 import javax.imageio.ImageIO;
 
 import models.Image;
+import utility.TiffReader;
 import blurring.ImageBlurrer;
 
 public class RunPageSegmentation {
@@ -61,7 +59,7 @@ public class RunPageSegmentation {
 					e.printStackTrace();
 				}
             //process only one image
-			}else if(args[0].contains(".jpg")){
+			}else if(args[0].contains(".jpg") || args[0].contains(".tif") ){
 				Image img = importImage(args[0]);
 				try{
 					segmentImage(img, false);
@@ -177,15 +175,20 @@ public class RunPageSegmentation {
 	public static Image importImage(String inputFilename){
 		BufferedImage inputImage = null;
 		int w=0,h=0;
-		try {
-			//System.out.println("Loading Image..");
-			File inputImageFile = new File(inputFilename);
-			inputImage = ImageIO.read(inputImageFile);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-			
+//		if(inputFilename.toLowerCase().contains("tif")){
+//			TiffReader.read(inputFilename);
+//		} else if(inputFilename.toLowerCase().contains("jpg")) {
+			try {
+				//System.out.println("Loading Image..");
+				File inputImageFile = new File(inputFilename);
+				inputImage = ImageIO.read(inputImageFile);
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+//				
+//		}
+		
 		Raster raster = inputImage.getData();
 		w = raster.getWidth();
 		h = raster.getHeight();
@@ -198,6 +201,33 @@ public class RunPageSegmentation {
 				pixels[i][j] = raster.getSample(j, i, 0);
 			}
 		}
+		
+		//Temporary Tiff solution
+		/***start***/
+		Boolean isBin = true;
+		/***Safety check***/
+		for(int i = 0; i < h; i++){
+			for(int j = 0; j < w; j++) {
+				if(pixels[i][j] != 1) {
+					isBin = false;
+				}
+				if(pixels[i][j] == 0) {
+					isBin = true;
+				}
+				if(!isBin) { break; }
+			}
+			if(!isBin) { break; }
+		}
+		if(isBin) {
+			for(int i = 0; i < h; i++){
+				for(int j = 0; j < w; j++) {
+					if(pixels[i][j] == 1){
+						pixels[i][j] = 255;
+					}
+				}
+			}
+		}
+		/***end***/
 		
 		img.setByteImage(pixels);
 		img.setByteImage2(pixels);
@@ -260,6 +290,7 @@ public class RunPageSegmentation {
                 	error = "Std Dev Above 150, "+img.getColumnBreaks();
                 	break;
             }
+            System.out.println(error);
             File output = new File(Constants.data, "imageFailedNeedHuman.txt");
             try {
                 if(!output.exists()) {

@@ -2,6 +2,7 @@ package processHelpers;
 
 import models.BinaryImage;
 import models.BlurredImage;
+import models.Image;
 
 public class SingleThresholdFinder {
 	
@@ -11,11 +12,10 @@ public class SingleThresholdFinder {
 	 * @param blurredImage
 	 * @return
 	 */
-	public BinaryImage generateBinaryImage(BlurredImage blurredImage){
+	public BinaryImage generateBinaryImage(Image img){
 		ThresholdFinder tf = new ThresholdFinder();
-		BinaryImage bImage = new BinaryImage(blurredImage);
-		tf.createImageHistogram(bImage);
-		bImage.setThreshold(tf.determineThreshold());
+		BinaryImage bImage = new BinaryImage(img);
+		bImage.setThreshold(tf.determineThreshold(img));
 		bImage.convertToBinaryImage();
 		return bImage;
 	}

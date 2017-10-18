@@ -32,7 +32,6 @@ public class AnalysisFileWriter {
 	 * @throws IOException
 	 */
 	public void importFilenames() throws IOException{
-
 		BufferedReader br = new BufferedReader(new FileReader(Constants.List));
 		StringBuilder sb = new StringBuilder();
 		String line, result;

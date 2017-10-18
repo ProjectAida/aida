@@ -1,6 +1,8 @@
 package models;
 
 import global.Constants;
+import utility.HistToolkit;
+import utility.ImageToolkit;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,13 +19,102 @@ import javax.imageio.ImageIO;
  */
 public class Image {
     
+
+	public Image(){
+		this.name = "";
+		this.containsPoem = false;
+		this.checkValue = false;
+		this.vertical = 0;
+		this.horizontal = 0;
+		this.stanzaMean = 0;
+		this.stanzaStandardDeviation = 0;
+		this.blurLevel = 3;
+		this.jaggedLineMean = 0;
+		this.jaggedLineStandardDeviation = 0;
+		this.leftMarginSize = 0;
+		this.rightMarginSize = 0;
+		this.byteImage = new int[1][0];
+		this.byteImage2 = new int[1][0];
+		this.hist = new long[this.maxIntensity];
+		this.rdf = new double[this.maxIntensity];
+		this.cdf = new double[this.maxIntensity];
+
+	}
+	
+	public Image(int h, int w){
+		this.name = "";
+		this.containsPoem = false;
+		this.checkValue = false;
+		this.vertical = h;
+		this.horizontal = w;
+		this.stanzaMean = 0;
+		this.stanzaStandardDeviation = 0;
+		this.blurLevel = 3;
+		this.jaggedLineMean = 0;
+		this.jaggedLineStandardDeviation = 0;
+		this.leftMarginSize = 0;
+		this.rightMarginSize = 0;
+		this.byteImage = new int[h][w];
+		this.byteImage2 = new int[h][w];
+		this.hist = new long[this.maxIntensity];
+		this.rdf = new double[this.maxIntensity];
+		this.cdf = new double[this.maxIntensity];
+	}
+	
+	public Image(Image img) {
+		this.byteImage = ImageToolkit.deepCopy(img.getByteImage());
+		this.byteImage2 = ImageToolkit.deepCopy(img.getByteImage2());
+		
+		this.name = img.getName();
+		this.byteImage = img.getByteImage();
+		this.checkValue = img.getCheckValue();
+		this.containsPoem = img.isContainsPoem();
+		this.vertical = img.getVertical();
+		this.horizontal = img.getHorizontal();
+		
+		this.jaggedLineMean = img.getJaggedLineMean();
+		this.jaggedLineStandardDeviation = img.getJaggedLineStandardDeviation();
+		this.jaggedMax = img.getJaggedMax();
+		this.jaggedMin = img.getJaggedMin();
+		this.jaggedRange = img.getJaggedRange();
+		
+		this.marginMean = img.getMarginMean();
+		this.marginStdDev = img.getMarginStdDev();
+		this.marginMax = img.getMarginMax();
+		this.marginMin = img.getMarginMin();
+		this.marginRange = img.getMarginRange();
+		
+		this.stanzaMean = img.getStanzaMean();
+		this.stanzaStandardDeviation = img.getStanzaStdDev();
+		this.stanzaMin = img.getStanzaMin();
+		this.stanzaMax = img.getStanzaMax();
+		this.stanzaRange = img.getStanzaRange();
+		
+		this.lengthMean = img.getLengthMean();
+		this.lengthStdDev = img.getLengthStdDev();
+		this.lengthMin = img.getLengthMin();
+		this.lengthMax = img.getLengthMax();
+		this.lengthRange = img.getLengthRange();
+		
+		this.columnBreaks = img.getColumnBreaks();
+
+		this.hist = img.getHist();
+		this.rdf = img.getRdf();
+		this.cdf = img.getCdf();
+		
+		this.maxIntensity = img.getMaxIntensity();
+		
+		this.blurLevel = img.getBlurLevel();
+		
+	}
+	
     private int COLUMN_COUNT_MAX = 50;
     private int WHITE_COLUMN_SEPARATION_MIN = 150;
     private int BLACK_COLUMN_SEPARATION_MIN = 125;
     private int EDGE_COLUMN_DISTANCE_MAX = 100;
     private int COLUMN_SEPARATION_MIN = 75;
 
-	public int[][] byteImage;
+	protected int[][] byteImage;
 	protected int[][] byteImage2;
 
 	protected String name;
@@ -57,9 +148,18 @@ public class Image {
 	protected double lengthMax;
 	protected double lengthRange;
 	
+	protected double leftMarginSize;
+	protected double rightMarginSize;
+	
 	protected ArrayList<Integer> columnBreaks;
 
-
+	protected long[] hist; //histogram
+	protected double[] rdf; //relative distribution function
+	protected double[] cdf; //cummulative distribution function
+	
+	protected int maxIntensity = 256;
+	
+	protected int blurLevel;
 
 	public double getLengthMean() {
 		return lengthMean;
@@ -100,7 +200,6 @@ public class Image {
 	public void setLengthRange(double lengthRange) {
 		this.lengthRange = lengthRange;
 	}
-	protected int blurLevel;
 
 	public double getStanzaMin() {
 		return stanzaMin;
@@ -189,8 +288,6 @@ public class Image {
 	public void setMarginStdDev(double marginStdDev) {
 		this.marginStdDev = marginStdDev;
 	}
-	protected double leftMarginSize;
-	protected double rightMarginSize;
 	
 	public void setParentName(String s){
 		this.parentName = s;
@@ -198,39 +295,6 @@ public class Image {
 
 	public String getParentName(){
 		return this.parentName;
-	}
-
-	public Image(){
-		this.name = "";
-		this.containsPoem = false;
-		this.checkValue = false;
-		this.vertical = 0;
-		this.horizontal = 0;
-		this.stanzaMean = 0;
-		this.stanzaStandardDeviation = 0;
-		this.blurLevel = 3;
-		this.jaggedLineMean = 0;
-		this.jaggedLineStandardDeviation = 0;
-		this.leftMarginSize = 0;
-		this.rightMarginSize = 0;
-
-	}
-	
-	public Image(int h, int w){
-		this.name = "";
-		this.containsPoem = false;
-		this.checkValue = false;
-		this.vertical = h;
-		this.horizontal = w;
-		this.stanzaMean = 0;
-		this.stanzaStandardDeviation = 0;
-		this.blurLevel = 3;
-		this.jaggedLineMean = 0;
-		this.jaggedLineStandardDeviation = 0;
-		this.leftMarginSize = 0;
-		this.rightMarginSize = 0;
-		this.byteImage = new int[h][w];
-		this.byteImage2 = new int[h][w];
 	}
 
 	public int[][] getByteImage2() {
@@ -289,8 +353,6 @@ public class Image {
 		this.horizontal = horizontal;
 	}
 
-
-
 	public int getBlurLevel() {
 		return blurLevel;
 	}
@@ -332,6 +394,7 @@ public class Image {
 	}
 	public void setByteImage(int[][] byteImage) {
 		this.byteImage = byteImage;
+		initHistograms();
 	}
 	public String getName() {
 		return name;
@@ -351,6 +414,63 @@ public class Image {
 	public void setColumnBreaks(ArrayList<Integer> columns){
 		this.columnBreaks = columns;
 	}
+	
+	/**
+	 * @return the hist
+	 */
+	public long[] getHist() {
+		return hist;
+	}
+	
+	/**
+	 * @param rdf the hist to set
+	 */
+	public void setHist(long[] hist) {
+		this.hist = hist;
+	}
+
+	/**
+	 * @return the rdf
+	 */
+	public double[] getRdf() {
+		return rdf;
+	}
+
+	/**
+	 * @param rdf the rdf to set
+	 */
+	public void setRdf(double[] rdf) {
+		this.rdf = rdf;
+	}
+
+	/**
+	 * @return the cdf
+	 */
+	public double[] getCdf() {
+		return cdf;
+	}
+
+	/**
+	 * @param cdf the cdf to set
+	 */
+	public void setCdf(double[] cdf) {
+		this.cdf = cdf;
+	}
+
+	/**
+	 * @return the maxIntensity
+	 */
+	public int getMaxIntensity() {
+		return maxIntensity;
+	}
+
+	/**
+	 * @param maxIntensity the maxIntensity to set
+	 */
+	public void setMaxIntensity(int maxIntensity) {
+		this.maxIntensity = maxIntensity;
+	}
+
 	/**
 	 * Method used to find the separation columns of a newspaper.
 	 * These columns can be represented visually by either whitespace separating text columns or
@@ -762,5 +882,11 @@ public class Image {
 			e.printStackTrace();
 		}
 	}
-
+	
+	private void initHistograms(){
+		this.hist = HistToolkit.computeHist(this.byteImage, this.maxIntensity);
+		this.rdf = HistToolkit.computeRDF(this.hist);
+		this.cdf = HistToolkit.computeCDF(this.rdf);
+	}
+	
 }

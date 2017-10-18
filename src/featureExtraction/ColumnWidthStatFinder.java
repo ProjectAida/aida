@@ -80,7 +80,7 @@ public class ColumnWidthStatFinder {
 	
 	private boolean analyzeColumn(BinaryImage binaryImg, int column){
 		for(int i = 30; i < binaryImg.getVertical() - 30; i++){
-			if(binaryImg.getBinaryImagePixels()[i][column] == 0){
+			if(binaryImg.getByteImage()[i][column] == 0){
 				return false;
 			}
 		}
