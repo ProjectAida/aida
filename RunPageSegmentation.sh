@@ -38,7 +38,7 @@ for i in $( ls ); do
             current=$(pwd)
             cd $src
 #java execute/RunPageSegmentation $current/$k
-            java -cp ../tif_jar/jai_imageio.jar:./ execute/RunPageSegmentation $current/$k
+            java -cp ../tif_jar/jai_imageio.jar:./ ./execute/RunPageSegmentation $current/$k
             cd $current
         done
             cd ..
