@@ -1,6 +1,6 @@
 #!/bin/bash
 cd src/
-javac -cp ../tif_jar/jai_imageio.jar:./ execute/RunPageSegmentation.java
+javac -cp ../tif_jar/jai_imageio.jar:./ ./execute/RunPageSegmentation.java
 cd ../
 
 beginYear=$1
