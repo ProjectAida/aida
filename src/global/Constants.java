@@ -10,6 +10,7 @@ package global;
 public class Constants {
 
 	//Complete Set
+    public static final String initPath = "../user.ini";
 	public static final String filePath = "../data/DriveImages/";
 	public static final String fullPagePath = "../data/FullPages/";
 	public static final String testPath = "../data/test_snippets/";

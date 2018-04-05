@@ -259,6 +259,9 @@ public class RunPageSegmentation {
         //Continue the process if image exited with no error
         //Otherwise stop processing the image and output the custom error message to a file
         if(shouldContinue == 0){
+            shouldContinue = img.convertPageToSnippets(true);
+        }
+        if(shouldContinue == 0){
             File output = new File(Constants.data, "imagePassed.txt");
             try {
                 if(!output.exists()) {
@@ -274,9 +277,8 @@ public class RunPageSegmentation {
             if(shouldShowColumns) {
                 img.showColumnBreaks();
             }
-            
-            img.convertPageToSnippets(true);
-        } else {
+        }
+        else {
             if(shouldShowColumns) {
                 img.showColumnBreaks();
             }
@@ -293,6 +295,9 @@ public class RunPageSegmentation {
                     break;
                 case 4:
                     error = "Std Dev Above 150, "+img.getColumnBreaks();
+                    break;
+                case 5:
+                    error = "Height of snippet is greater than fullpage ";
                     break;
             }
             File output = new File(Constants.data, "imageFailedNeedHuman.txt");

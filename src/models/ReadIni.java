@@ -5,6 +5,7 @@
  */
 package models;
 
+import global.Constants;
 import java.util.*;
 import java.io.*;
 /**
@@ -37,7 +38,7 @@ public class ReadIni {
     public ReadIni(){
         Properties p = new Properties();
         try{
-            p.load(new FileInputStream("../user.ini"));
+            p.load(new FileInputStream(Constants.initPath));
             // Load members' info from user.ini file
             this.ImageType = myEnums.GetIntOfImageType(p.getProperty("ImageType").toUpperCase());
             this.NeedBinarizing = myEnums.GetIntOfTrueFalse(p.getProperty("NeedBinarizing").toUpperCase());
