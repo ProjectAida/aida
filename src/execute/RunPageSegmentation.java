@@ -18,6 +18,8 @@ import java.io.BufferedWriter;
 import javax.imageio.ImageIO;
 
 import models.Image;
+import models.BinaryImage;
+import models.BlurredImage;
 import blurring.ImageBlurrer;
 
 import models.ReadIni;

@@ -635,89 +635,92 @@ public class Image {
      * will use those breakpoints to dynamically create snippets of varying width and height (a 14/9 ratio).
      * Snippets are outputted to the directory noted by Constants.Snippets and are grouped together by the full page they came from.
      */
-    public void convertPageToSnippets(boolean scaleDown){
+    public int convertPageToSnippets(boolean scaleDown){
         int height = snippetHeight();
         int nextBegin = 0;
         int nextEnd = height;
         int snippetRow = 0;
         int snippetColumn = 0;
         
-        assert height <= this.vertical : "Snippet's width is too long. This result snippet's height to be longer than the full page."
+        assert height <= this.vertical : "Snippet's width is too long. This result snippet's height to be longer than the full page.";
         
         //Check if it has a valid snippet size
         if (height > this.vertical){
             return 5;
         }
-        
-        //Identify the parent image name.
-        String snippetSubName = this.getName().substring(0, this.getName().lastIndexOf('.'));
-        String issueName = snippetSubName.substring(0, snippetSubName.lastIndexOf('_'));
-        String parentName = this.getName().substring(0, this.getName().indexOf('_'));
-        
-        //populate snippet matrix with pixels from full page.
-        for(int i = 0; i < columnBreaks.size()-1; i++){
-            int width = columnBreaks.get(i+1) - columnBreaks.get(i);
-            int[][] snippet = new int[height][width];
-            int c = 0;
-            for(int j = columnBreaks.get(i); j < columnBreaks.get(i+1); j++){
-                int r = 0;
-                for(int k = nextBegin; k < nextEnd; k++){
-                    snippet[r][c] = this.byteImage2[k][j];
-                    r++;
+        else{
+            //Identify the parent image name.
+            String snippetSubName = this.getName().substring(0, this.getName().lastIndexOf('.'));
+            String issueName = snippetSubName.substring(0, snippetSubName.lastIndexOf('_'));
+            String parentName = this.getName().substring(0, this.getName().indexOf('_'));
+            
+            //populate snippet matrix with pixels from full page.
+            for(int i = 0; i < columnBreaks.size()-1; i++){
+                int width = columnBreaks.get(i+1) - columnBreaks.get(i);
+                int[][] snippet = new int[height][width];
+                int c = 0;
+                for(int j = columnBreaks.get(i); j < columnBreaks.get(i+1); j++){
+                    int r = 0;
+                    for(int k = nextBegin; k < nextEnd; k++){
+                        snippet[r][c] = this.byteImage2[k][j];
+                        r++;
+                    }
+                    c++;
                 }
-                c++;
-            }
-            
-            //identify the location of snippet in the full page. Use as name of the snippet
-            String snippetName = snippetSubName+"_"+snippetRow+"_"+snippetColumn+".jpg";
-            
-            //Create BufferedImage for file writing. If scale down is needed perform that
-            //first. For the time being scale is hard coded at 4x4.
-            BufferedImage OutputImage;
-            if(scaleDown){
-                int scale = 4;
-                int[][] scaledSnippet = scaleDownSnippet(scale, snippet, height, width);
                 
-                OutputImage = new BufferedImage(width/scale, height/scale, BufferedImage.TYPE_INT_RGB);
-                for (int y = 0; y < height/scale; y++) {
-                    for (int x = 0; x < width/scale; x++) {
-                        //The following line offsets the pixels' values to fix the 'blue problem'
-                        int value = scaledSnippet[y][x] << 16 | scaledSnippet[y][x] << 8 | scaledSnippet[y][x];
-                        OutputImage.setRGB(x, y, value);
+                //identify the location of snippet in the full page. Use as name of the snippet
+                String snippetName = snippetSubName+"_"+snippetRow+"_"+snippetColumn+".jpg";
+                
+                //Create BufferedImage for file writing. If scale down is needed perform that
+                //first. For the time being scale is hard coded at 4x4.
+                BufferedImage OutputImage;
+                if(scaleDown){
+                    int scale = 4;
+                    int[][] scaledSnippet = scaleDownSnippet(scale, snippet, height, width);
+                    
+                    OutputImage = new BufferedImage(width/scale, height/scale, BufferedImage.TYPE_INT_RGB);
+                    for (int y = 0; y < height/scale; y++) {
+                        for (int x = 0; x < width/scale; x++) {
+                            //The following line offsets the pixels' values to fix the 'blue problem'
+                            int value = scaledSnippet[y][x] << 16 | scaledSnippet[y][x] << 8 | scaledSnippet[y][x];
+                            OutputImage.setRGB(x, y, value);
+                        }
+                    }
+                }else{
+                    OutputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            //The following line offsets the pixels' values to fix the 'blue problem'
+                            int value = snippet[y][x] << 16 | snippet[y][x] << 8 | snippet[y][x];
+                            OutputImage.setRGB(x, y, value);
+                        }
                     }
                 }
-            }else{
-                OutputImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        //The following line offsets the pixels' values to fix the 'blue problem'
-                        int value = snippet[y][x] << 16 | snippet[y][x] << 8 | snippet[y][x];
-                        OutputImage.setRGB(x, y, value);
+                
+                //Output the snippet to a file of our choosing
+                File outputFile = new File(Constants.Snippets+parentName+"/"+issueName+"/"+snippetSubName+"/",snippetName);
+                outputFile.mkdirs();
+                try {
+                    ImageIO.write(OutputImage, "jpg", outputFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                snippetColumn++;
+                
+                //determine if row is complete, if yes move to next row, and if not move to next column
+                if(i == columnBreaks.size() - 2){
+                    nextBegin = nextEnd - (height/2);
+                    nextEnd = nextBegin + height;
+                    if(nextEnd <= this.getVertical()){
+                        i = -1;
+                        snippetRow++;
+                        snippetColumn = 0;
                     }
                 }
             }
-            
-            //Output the snippet to a file of our choosing
-            File outputFile = new File(Constants.Snippets+parentName+"/"+issueName+"/"+snippetSubName+"/",snippetName);
-            outputFile.mkdirs();
-            try {
-                ImageIO.write(OutputImage, "jpg", outputFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            snippetColumn++;
-            
-            //determine if row is complete, if yes move to next row, and if not move to next column
-            if(i == columnBreaks.size() - 2){
-                nextBegin = nextEnd - (height/2);
-                nextEnd = nextBegin + height;
-                if(nextEnd <= this.getVertical()){
-                    i = -1;
-                    snippetRow++;
-                    snippetColumn = 0;
-                }
-            }
+            return 0;
         }
+        
     }
     
     /**
