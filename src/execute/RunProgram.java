@@ -231,8 +231,7 @@ public class RunProgram {
 		int w=0,h=0;
 		try {
 			System.out.println("Loading Image..");
-			//File inputImageFile = new File(Constants.data, inputFilename);
-                        File inputImageFile = new File("/Users/Mike/aida/data/", inputFilename);
+			File inputImageFile = new File(Constants.data, inputFilename);
 			BufferedImage inputImage = ImageIO.read(inputImageFile);
 
 			Raster raster = inputImage.getData();
