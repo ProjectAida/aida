@@ -52,7 +52,7 @@ public class RunProgram {
 
 		// Manual Controls
 		int blurMode = consolidated;	// tripleRegular or consolidated
-		int whatSet = train;			// 'test' for testing set of 7500+ snippets. 'train' for 400 training snippets
+		int whatSet = test;			// 'test' for testing set of 7500+ snippets. 'train' for 400 training snippets
 		boolean outCustom = true;		// Set true output the image, false when output of images themselves is not necessary
 		boolean outBinary = true;		// Set true to output binary images
 		boolean outBlurred= false;		// Set true to output blurred images.
