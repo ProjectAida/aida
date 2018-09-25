@@ -1,5 +1,6 @@
 package blurring;
 
+import consolidator.ConsolidationEngine;
 import models.BinaryImage;
 /**
  * This class is responsible for running consolidated blurring on an image.
@@ -17,6 +18,32 @@ public class CustomBlurrerEngine {
 		
 	}
 	
+	public int[][] consolidateImage(BinaryImage binaryImage){
+		//ConsolidatedImage retImg = new ConsolidatedImage(Image);
+		
+		/************************
+		 * new solution
+		 */
+		
+		ConsolidationEngine engine = new ConsolidationEngine();
+		
+		//no recursion
+//		int[][] retImg = engine.noRecursion(binaryImage.getBinaryImagePixels());
+
+		//recursion
+//		int[][] retImg = engine.recursion(binaryImage.getBinaryImagePixels());
+
+		//combine
+		int[][] retImg = engine.mixedConsolidation(binaryImage.getBinaryImagePixels());
+	
+		/************************
+		 * old solution
+		 */
+		
+//		int[][] retImg = blurImage(binaryImage);
+		
+		return retImg;
+	}
 	
 	public int[][] blurImage(BinaryImage binaryImage){
 		int start = -100;

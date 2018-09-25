@@ -15,7 +15,7 @@ public class SingleThresholdFinder {
 		ThresholdFinder tf = new ThresholdFinder();
 		BinaryImage bImage = new BinaryImage(blurredImage);
 		tf.createImageHistogram(bImage);
-		bImage.setThreshold(tf.determineThreshold());
+		bImage.setThreshold(tf.determineThreshold(blurredImage));
 		bImage.convertToBinaryImage();
 		return bImage;
 	}
