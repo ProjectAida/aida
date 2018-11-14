@@ -69,7 +69,7 @@ public class RunPageSegmentation {
             }else if(args[0].contains(".jpg") || args[0].contains(".tif")){
                 Image img = importImage(args[0]);
                 try{
-                    segmentImage(img, true);
+                    segmentImage(img, false);
                 } catch(Exception e){
                     e.printStackTrace();
                     //System.out.println("ERROR: Unable to segment "+img.getName()+"\nPlease make sure that the page isn't rotated");
