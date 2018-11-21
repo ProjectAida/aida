@@ -163,7 +163,7 @@ public class ImageBlurrer {
 		bni.setBinaryImagePixels(im.getByteImage());
 
 		CustomBlurrerEngine cbe = new CustomBlurrerEngine();
-		bni.setBinaryImagePixels(cbe.blurImage(bni));
+		bni.setBinaryImagePixels(cbe.consolidateImage(bni));
 
 		BufferedImage OutputImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
 		int[][] pixels3 = bni.getBinaryImagePixels();

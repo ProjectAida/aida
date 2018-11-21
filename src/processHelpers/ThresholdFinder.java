@@ -1,6 +1,8 @@
 package processHelpers;
 
+import binarizator.BinarizationEngine;
 import models.BlurredImage;
+import utility.HistToolkit;
 
 public class ThresholdFinder {
 
@@ -49,61 +51,30 @@ public class ThresholdFinder {
 		}
 		setMean((sum/count));
 	}
-	
+	private double computeMean(long[] hist){
+		long count = 0;
+		long sum = 0;
+		for(int i = 0; i < hist.length; i++){
+			//System.out.println("histogram["+i+"] "+this.histogram[i]);
+			sum += (i * hist[i]);
+			count += (hist[i]);
+		}
+		return (((double)sum/(double)count));
+	}
 	/**
 	 * Method determines the threshold for the blurred image. Threshold value found by
 	 * processing the image's histogram using bi-gaussian processing.
 	 * @return threshold
 	 */
-	public int determineThreshold(){
-		int threshold = 0;
-		 
-		int localMean = (int)this.mean;
-		//System.out.println(localMean);
-		    
-		int start = 0;
-		long sum = 0;
-		long totalPoints = 0;
-		for (int i = start; i < localMean; i++) {
-			long points = this.histogram[i];
-			if(i==0){
-				sum = points;
-			}else{
-		       sum += i*points;
-			}
-		       //System.out.println("["+i+"]"+points);
-		       totalPoints += points;
-		}  /* end for */
-
-		double little_mean = (1.0*sum)/(1.0*totalPoints);
+	public int determineThreshold(BlurredImage blurredImage){
+		//D-Lib solution (old solution)
+//				return BinarizationEngine.dlibBinMethod(computeMean(this.histogram), this.histogram);
 		
-
-		/* Find the minimum in the valley region */
-		int min1 = (int)Math.floor(little_mean+0.5);
-		int min2 = min1 - 1;
-		for (int i = (int)Math.floor(little_mean+0.5); i < localMean; i++) {
-			if (histogram[i] < histogram[min1])
-				min1 = i;
-		}
-
-		int max1 = (int) Math.floor(little_mean+0.5);
-		for (int i = (int) Math.floor(little_mean+0.5); i > start; i--) {
-			if (histogram[i] > histogram[max1])
-				max1 = i;
-		}
-
-		for (int i = (int) Math.floor(little_mean+0.5); i > max1; i--) {
-			if (histogram[i] < histogram[min2])
-				min2 = i;
-		}
-
-		if (histogram[min2] < histogram[min1]){
-			min1 = min2;
-		}
-		    
-		threshold = min1; 
-		System.out.println(threshold);
-		return threshold;
+		//Otsu's method (new solution)
+				return BinarizationEngine.otsuMethod(HistToolkit.computeRDF(this.histogram));
+		
+		//3-mean method (foreground-bleed_through-background signals)
+//				return BinarizationEngine.threeMeanBinMethod(this.histogram);
 	}
 	
 	/******* Getters and Setters *******/
