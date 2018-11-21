@@ -8,6 +8,7 @@ import java.util.Iterator;
 public class LineThresholdFinders {
 	/**
 	 * Author: Ian
+	 * Text Line Consolidation using average percentage of all region as threshold
 	 * @param x: offset (start row #)
 	 * @param range: block height
 	 * @param img: snippet
@@ -40,6 +41,7 @@ public class LineThresholdFinders {
 	}
 	/**
 	 * Author: Ian
+	 * Text Line Consolidation using median percentage of all region as threshold
 	 * @param x: offset (start row #)
 	 * @param range: block height
 	 * @param img: snippet
@@ -79,6 +81,7 @@ public class LineThresholdFinders {
 	}
 	/**
 	 * Author: Ian
+	 * Text Line Consolidation using the top common percentage of all region as threshold
 	 * @param x: offset (start row #)
 	 * @param range: block height
 	 * @param img: snippet
@@ -126,6 +129,7 @@ public class LineThresholdFinders {
 	}
 	/**
 	 * Author: Ian
+	 * Text Line Consolidation using the average of 3 top common percentage of all region as threshold
 	 * @param x: offset (start row #)
 	 * @param range: block height
 	 * @param img: snippet

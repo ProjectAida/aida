@@ -235,6 +235,7 @@ public class ConsolidationEngine {
 	/**
 	 * @author Ian
 	 * FillRow_Kernel()
+	 * textual line smearer
 	 * Feb. 2017
 	 */
 	private static int[][] solidate(int x, int range, int[][] img) {

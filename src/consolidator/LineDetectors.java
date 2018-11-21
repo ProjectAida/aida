@@ -9,6 +9,7 @@ public class LineDetectors {
 	/**
 	 * @author Ian
 	 * row summation with neighborhood emphasis
+	 * Obtain Row Histogram using average of number of textual pixels
 	 * Feb. 2017
 	 */
 	 static double[] lineDetector(int offset, int range, int sumlvl, int[][] img) {
@@ -75,6 +76,7 @@ public class LineDetectors {
 	/**
 	 * @author Ian
 	 * row summation with Gaussian weight
+	 * Obtain Row Histogram using average of number of textual pixels
 	 * Feb. 2017
 	 */
 	 static double[] lineDetector_Gaussian(int offset, int range, int sumlvl, double sigma, int[][] img) {
@@ -119,6 +121,7 @@ public class LineDetectors {
 	/**
 	 * @author Ian
 	 * row summation with neighborhood emphasis
+	 * Obtain Row Histogram using median of number of textual pixels
 	 * Feb. 2017
 	 */
 	 static double[] lineDetector_median(int offset, int range, int sumlvl, int[][] img) {

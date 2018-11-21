@@ -8,6 +8,7 @@ import java.util.Iterator;
 public class LineHeightDetectors {
 	/** 
 	 * Author: Ian
+	 * Find Common Block Heights Extraction using the most comman line height
 	 * @param sub: NAP or partial NAP
 	 * @param direct: 1. >0 --> find black line height
 	 * 				  2. otherwise --> find white line height
@@ -108,6 +109,7 @@ public class LineHeightDetectors {
 	
 	/** 
 	 * Author: Ian
+	 * Find Common Block Heights Extraction using the average of 3 most comman line height
 	 * @param sub: NAP or partial NAP
 	 * @param direct: 1. >0 --> find black line height
 	 * 				  2. otherwise --> find white line height
@@ -232,6 +234,7 @@ public class LineHeightDetectors {
 	
 	/** 
 	 * Author: Ian
+	 * Find Common Block Heights Extraction using the max line height
 	 * @param sub: NAP or partial NAP
 	 * @param direct: 1. >0 --> find black line height
 	 * 				  2. otherwise --> find white line height
@@ -312,6 +315,7 @@ public class LineHeightDetectors {
 	
 	/** 
 	 * Author: Ian
+	 * Find Common Block Heights Extraction using the median line height
 	 * @param sub: NAP or partial NAP
 	 * @param direct: 1. >0 --> find black line height
 	 * 				  2. otherwise --> find white line height
@@ -396,6 +400,7 @@ public class LineHeightDetectors {
 	
 	/** 
 	 * Author: Ian
+	 * Find Common Block Heights Extraction using the average line height
 	 * @param sub: NAP or partial NAP
 	 * @param direct: 1. >0 --> find black line height
 	 * 				  2. otherwise --> find white line height
