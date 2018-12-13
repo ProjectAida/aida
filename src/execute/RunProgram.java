@@ -135,7 +135,7 @@ public class RunProgram {
 		imb.blurImage(img5 ,outBlurred);
 		
                 // 9.17.2017. Added this branch to skip binarization if image is already binarized
-                if(myConfig.GetNeedBinarizing() == myEnums.GetIntOfTrueFalse("FALSE")){
+                if(myConfig.GetNeedBinarizing() == myEnums.GetIntOfTrueFalse("TRUE")){
                     imb.binarizeImage(img5, outBinary);   
                 }
 		if(isCustom){
